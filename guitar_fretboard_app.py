@@ -218,15 +218,32 @@ class FretboardWidget(QFrame):
     
     def __init__(self):
         super().__init__()
-        self.setMinimumSize(QSize(1000, 600))
+        self.setMinimumSize(QSize(1600, 1000))
         self.pressed_notes = set()  # MIDI notes currently pressed
         self.chord_name = None
         self.chord_frets = {}  # Fret positions for the selected chord
+        
+        # Load guitar image
+        from PySide6.QtGui import QPixmap
+        self.guitar_image = QPixmap('fenderstrat.jpg')
+        if self.guitar_image.isNull():
+            print("Warning: Could not load fenderstrat.jpg")
+            self.has_image = False
+        else:
+            self.has_image = True
         
         # Setup timer for periodic repaint (thread-safe)
         self.update_timer = QTimer()
         self.update_timer.timeout.connect(self.update)
         self.update_timer.start(50)  # Update every 50ms
+        
+        # Dynamic positioning - will be calculated in paintEvent
+        self.img_x = 0
+        self.img_y = 0
+        self.img_width = 0
+        self.img_height = 0
+        self.string_positions = []
+        self.fret_positions = []
         
     def set_pressed_notes(self, notes):
         """Update which MIDI notes are currently pressed"""
@@ -256,79 +273,106 @@ class FretboardWidget(QFrame):
         return None
     
     def paintEvent(self, event):
-        """Draw the fretboard"""
+        """Draw the fretboard with guitar image background"""
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
         
         width = self.width()
         height = self.height()
         
-        # Padding and dimensions
-        left_margin = 80
-        top_margin = 40
-        string_spacing = (height - 2 * top_margin) / (self.NUM_STRINGS - 1)
-        fret_width = (width - 2 * left_margin) / self.NUM_FRETS
+        # Draw background
+        painter.fillRect(0, 0, width, height, QColor(240, 240, 240))
         
         # Draw title
         painter.setFont(QFont('Arial', 16, QFont.Bold))
-        painter.drawText(10, 20, f"Guitar Fretboard{' - ' + self.chord_name if self.chord_name else ''}")
+        painter.drawText(10, 25, f"Guitar Fretboard{' - ' + self.chord_name if self.chord_name else ''}")
         
-        # Draw fret numbers
-        painter.setFont(QFont('Arial', 10))
-        for fret in range(self.NUM_FRETS + 1):
-            x = left_margin + fret * fret_width
-            painter.drawText(x - 10, top_margin - 20, 20, 20, Qt.AlignCenter, str(fret))
-        
-        # Draw strings (horizontal lines)
-        painter.setPen(QPen(QColor(0, 0, 0), 2))
-        for string_idx in range(self.NUM_STRINGS):
-            y = top_margin + string_idx * string_spacing
-            painter.drawLine(left_margin, y, width - left_margin, y)
-            
-            # Draw string label
-            note_name = self._midi_to_note(self.STANDARD_TUNING[string_idx])
-            painter.drawText(5, y - 10, 70, 20, Qt.AlignRight | Qt.AlignVCenter, note_name)
-        
-        # Draw frets (vertical lines)
-        painter.setPen(QPen(QColor(100, 100, 100), 1))
-        for fret in range(1, self.NUM_FRETS + 1):
-            x = left_margin + fret * fret_width
-            painter.drawLine(x, top_margin, x, height - top_margin)
-        
-        # Draw fret markers (dots on the side)
-        marker_frets = [3, 5, 7, 9, 12, 15, 17, 19, 21]
-        painter.setPen(QPen(QColor(150, 150, 150), 1))
-        painter.setBrush(QBrush(QColor(150, 150, 150)))
-        marker_x = width - left_margin + 30
-        for fret in marker_frets:
-            if fret <= self.NUM_FRETS:
-                y = top_margin + (self.NUM_STRINGS - 1) / 2 * string_spacing
-                painter.drawEllipse(int(marker_x - 4), int(y - 4), 8, 8)
-        
-        # Draw chord dots (practice target)
-        if self.chord_frets:
-            painter.setBrush(QBrush(QColor(100, 150, 255)))
-            painter.setPen(QPen(QColor(50, 100, 200), 2))
-            
-            for string_idx, frets in self.chord_frets.items():
-                if string_idx < len(frets):
-                    fret = frets[string_idx]
-                    if fret > 0:  # 0 = open string (no dot)
-                        y = top_margin + string_idx * string_spacing
-                        x = left_margin + fret * fret_width
-                        painter.drawEllipse(int(x - 12), int(y - 12), 24, 24)
-        
-        # Draw pressed notes (active frets)
-        painter.setBrush(QBrush(QColor(255, 0, 0)))
-        painter.setPen(QPen(QColor(200, 0, 0), 2))
-        
-        for note in self.pressed_notes:
-            result = self.get_fret_for_note(note)
-            if result:
-                string_idx, fret = result
-                y = top_margin + string_idx * string_spacing
-                x = left_margin + fret * fret_width
-                painter.drawEllipse(int(x - 15), int(y - 15), 30, 30)
+        # Draw guitar image if available
+        if self.has_image and not self.guitar_image.isNull():
+            try:
+                # Scale image to fit window (minimal margins - double the size)
+                max_width = width - 20
+                max_height = height - 60
+                
+                # Scale maintaining aspect ratio
+                scaled_image = self.guitar_image.scaledToWidth(max_width, Qt.SmoothTransformation)
+                
+                # If scaled image is too tall, scale by height instead
+                if scaled_image.height() > max_height:
+                    scaled_image = self.guitar_image.scaledToHeight(max_height, Qt.SmoothTransformation)
+                
+                self.img_width = scaled_image.width()
+                self.img_height = scaled_image.height()
+                
+                # Center the image horizontally, position below title
+                self.img_x = (width - self.img_width) // 2
+                self.img_y = 50
+                
+                # Draw the image
+                painter.drawPixmap(self.img_x, self.img_y, scaled_image)
+                
+                # Calculate string and fret positions based on image dimensions
+                # These are percentages from the edges of the image
+                string_positions = []
+                string_top = self.img_y + self.img_height * 0.12
+                string_bottom = self.img_y + self.img_height * 0.88
+                string_spacing = (string_bottom - string_top) / 5
+                
+                for i in range(6):
+                    y = string_top + string_spacing * i
+                    string_positions.append(y)
+                
+                fret_positions = []
+                fret_left = self.img_x + self.img_width * 0.05
+                fret_right = self.img_x + self.img_width * 0.95
+                fret_spacing = (fret_right - fret_left) / self.NUM_FRETS
+                
+                for i in range(self.NUM_FRETS + 1):
+                    x = fret_left + fret_spacing * i
+                    fret_positions.append(x)
+                
+                self.string_positions = string_positions
+                self.fret_positions = fret_positions
+                
+                # Draw chord dots (practice target) - light blue with transparency
+                if self.chord_frets:
+                    painter.setBrush(QBrush(QColor(100, 150, 255, 180)))
+                    painter.setPen(QPen(QColor(50, 100, 200), 2))
+                    
+                    for string_idx, frets in self.chord_frets.items():
+                        try:
+                            if string_idx < len(frets) and string_idx < len(string_positions):
+                                fret = frets[string_idx]
+                                if fret > 0 and fret < len(fret_positions):  # 0 = open string
+                                    x = fret_positions[fret]
+                                    y = string_positions[string_idx]
+                                    dot_size = int(self.img_width * 0.025)
+                                    painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
+                        except (IndexError, TypeError):
+                            pass
+                
+                # Draw pressed notes (active frets) - bright red
+                painter.setBrush(QBrush(QColor(255, 0, 0, 200)))
+                painter.setPen(QPen(QColor(200, 0, 0), 3))
+                
+                for note in self.pressed_notes:
+                    try:
+                        result = self.get_fret_for_note(note)
+                        if result:
+                            string_idx, fret = result
+                            if string_idx < len(string_positions) and fret < len(fret_positions):
+                                x = fret_positions[fret]
+                                y = string_positions[string_idx]
+                                dot_size = int(self.img_width * 0.03)
+                                painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
+                    except (IndexError, TypeError):
+                        pass
+                        
+            except Exception as e:
+                print(f"Error drawing guitar image: {e}")
+        else:
+            # Fallback if no image - draw simple fretboard
+            painter.drawText(width // 2 - 100, height // 2, "No guitar image found")
     
     def _midi_to_note(self, midi_note):
         """Convert MIDI note number to note name"""
