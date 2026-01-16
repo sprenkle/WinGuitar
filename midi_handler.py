@@ -12,8 +12,14 @@ except ImportError:
 
 class MIDIHandler(QObject):
     """Handles MIDI input in a separate thread"""
-    midi_note_received = Signal(int, int)  # note, velocity
-    midi_note_released = Signal(int)  # note
+    midi_note_received = Signal(int, int, int)  # string, fret, note
+    midi_note_released = Signal(int, int)  # string, fret
+    fret_pressed = Signal(int, int)  # string, fret
+    fret_released = Signal(int, int)  # string, fret
+
+    # Standard tuning MIDI notes (lowest to highest string)
+    STANDARD_TUNING = [40, 45, 50, 55, 59, 64]  # E2, A2, D3, G3, B3, E4
+    NUM_FRETS = 24
     
     def __init__(self):
         super().__init__()
@@ -34,33 +40,22 @@ class MIDIHandler(QObject):
         self.running = True
         return True
     
-    def start_listening(self, port_name=None):
-        """Start listening to MIDI input"""
-        try:
-            if port_name:
-                self.input_port = mido.open_input(port_name)
-            else:
-                # Try to open default MIDI input
-                available_inputs = mido.get_input_names()
-                if available_inputs:
-                    self.input_port = mido.open_input(available_inputs[0])
-                else:
-                    print("No MIDI inputs available")
-                    return False
-            
-            self.running = True
-            self.use_ble = False
-            return True
-        except Exception as e:
-            print(f"Error opening MIDI input: {e}")
-            return False
-    
     def listen(self):
         """Listen for MIDI messages (run in thread)"""
         if self.use_ble:
             self.listen_ble()
         else:
             self.listen_standard()
+    
+    def midi_to_note_name(self, midi_note):
+        """Convert MIDI note number to note name"""
+        notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+        note = notes[midi_note % 12]
+        octave = (midi_note // 12) - 1
+        return f"{note}{octave}"
+    
+    def midi_to_fret_info(self, string, midi_note):
+        return midi_note - self.STANDARD_TUNING[string]  
     
     def listen_standard(self):
         """Listen for standard MIDI messages"""
@@ -73,8 +68,18 @@ class MIDIHandler(QObject):
                     break
                 
                 if msg.type == 'note_on':
+                    fret_info = self.midi_to_fret_info(msg.note)
+                    note_name = self.midi_to_note_name(msg.note)
+                    if fret_info:
+                        string_idx, fret = fret_info
+                        print(f"Note On: String {string_idx}, Fret {fret}, Note {note_name}")
                     self.midi_note_received.emit(msg.note, msg.velocity)
                 elif msg.type == 'note_off':
+                    fret_info = self.midi_to_fret_info(msg.note)
+                    note_name = self.midi_to_note_name(msg.note)
+                    if fret_info:
+                        string_idx, fret = fret_info
+                        print(f"Note Off: String {string_idx}, Fret {fret}, Note {note_name}")
                     self.midi_note_released.emit(msg.note)
         except Exception as e:
             print(f"MIDI listening error: {e}")
@@ -109,34 +114,38 @@ class MIDIHandler(QObject):
                         while i < len(data):
                             midi_status = data[i]
                             command = midi_status & 0xF0
-                            channel = midi_status & 0x0F
+                            string = midi_status & 0x0F
                             
                             # Filter system messages
                             if command == 0xF0:  # System exclusive
                                 i += 1
                                 continue
-                            
+                            print(f"MIDI Status: {midi_status:02x}, Command: {command:02x}, String: {string}")
                             # 3-byte messages: Note On (0x90), Note Off (0x80), CC (0xB0), Polyphonic Pressure (0xA0)
                             if command in [0x80, 0x90, 0xA0, 0xB0]:
                                 if i + 2 >= len(data):
                                     break
-                                
+
+                                fret = self.midi_to_fret_info(note)
                                 note = data[i + 1]
                                 velocity = data[i + 2]
                                 
                                 if command == 0x90:  # Note On
                                     if velocity > 0:
-                                        print(f"Note On: {note}, Velocity: {velocity}")
-                                        self.midi_note_received.emit(note, velocity)
+                                        self.midi_note_received.emit(string, fret, note)
                                     else:
                                         # Note on with velocity 0 = note off
-                                        print(f"Note Off: {note}")
-                                        self.midi_note_released.emit(note)
+                                        self.midi_note_released.emit(string, fret)
                                 
                                 elif command == 0x80:  # Note Off
-                                    print(f"Note Off: {note}")
-                                    self.midi_note_released.emit(note)
-                                
+                                    self.midi_note_released.emit(string, fret)
+                                elif command == 0xB0:  # Control Change
+                                    fret_number = data[i+2]
+                                    if data[i+1] & 0x01:
+                                        self.fret_pressed.emit(string, fret_number)
+                                    else:
+                                        self.fret_released.emit(string, fret_number)
+
                                 i += 3
                             
                             # 2-byte messages: Program Change (0xC0), Channel Pressure (0xD0)

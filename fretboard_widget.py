@@ -183,7 +183,7 @@ class FretboardWidget(QFrame):
                 
                 # Center the image horizontally, position below title
                 img_x = (width - img_width) // 2
-                img_y = 50
+                img_y = (height - img_height) // 2 
                 
                 # Draw the image
                 painter.drawPixmap(img_x, img_y, scaled_image)
@@ -208,9 +208,9 @@ class FretboardWidget(QFrame):
                                     if fret > 0 and string_idx < len(self.horizontal_positions) and fret < len(self.vertical_positions):
                                         # Get position from JSON
                                         # vertical_positions[fret] gives Y, horizontal_positions[string_idx] gives X
-                                        y = img_y + self.vertical_positions[fret] * scale_y
-                                        x = img_x + self.horizontal_positions[string_idx] * scale_x
-                                        dot_size = int(img_width * 0.025)
+                                        y = img_y + self.vertical_positions[5 - string_idx] * scale_y
+                                        x = img_x + (self.horizontal_positions[fret - 1] - 5) * scale_x
+                                        dot_size = 10 # Fixed size for chord dots
                                         painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
                             except (IndexError, TypeError):
                                 pass
@@ -226,6 +226,7 @@ class FretboardWidget(QFrame):
                                 string_idx, fret = result
                                 if string_idx < len(self.horizontal_positions) and fret < len(self.vertical_positions):
                                     # vertical_positions[fret] gives Y, horizontal_positions[string_idx] gives X
+                                    y = img_y + self.horizontal_positions[string_idx] * scale_y
                                     y = img_y + self.vertical_positions[fret] * scale_y
                                     x = img_x + self.horizontal_positions[string_idx] * scale_x
                                     dot_size = int(img_width * 0.03)
@@ -233,6 +234,7 @@ class FretboardWidget(QFrame):
                         except (IndexError, TypeError):
                             pass
                 else:
+                    print("No JSON positions available for drawing dots" )
                     # Fallback if no JSON config
                     painter.drawText(width // 2 - 200, height // 2, "JSON configuration not loaded")
                         
@@ -248,3 +250,24 @@ class FretboardWidget(QFrame):
         note = notes[midi_note % 12]
         octave = (midi_note // 12) - 1
         return f"{note}{octave}"
+
+if __name__ == '__main__':
+    """Test the FretboardWidget by displaying a C note"""
+    from PySide6.QtWidgets import QApplication
+    
+    app = QApplication([])
+    
+    widget = FretboardWidget()
+    widget.setWindowTitle("Fretboard Widget Test - C Note")
+    
+    # Set E Major chord as the practice target
+    widget.set_chord('E Major')
+    
+    # Simulate pressing a C note (MIDI note 48 = C3)
+    # C note is on multiple strings at different frets
+    widget.add_pressed_note(48)  # C3
+    
+    widget.show()
+    
+    # Exit when window is closed
+    app.exec()

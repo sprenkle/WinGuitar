@@ -31,16 +31,11 @@ class GuitarFretboardApp(QMainWindow):
         self.setWindowTitle("Guitar Fretboard - Aeroband")
         self.setGeometry(100, 100, 1200, 700)
         
-        # Setup logging
-        with open('guitar_app.log', 'w') as f:
-            f.write("=== Guitar Fretboard App Started ===\n")
         
         # MIDI handler
         self.midi_handler = MIDIHandler()
         self.midi_handler.midi_note_received.connect(self.on_note_pressed)
         self.midi_handler.midi_note_released.connect(self.on_note_released)
-        
-        self._log("MIDI handler created and signals connected")
         
         # Device info
         self.ble_devices = {}
