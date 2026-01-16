@@ -16,6 +16,7 @@ from PySide6.QtWidgets import QFrame
 
 from fretboard_widget import FretboardWidget
 from midi_handler import MIDIHandler
+from guitar import GuitarState
 
 try:
     from bleak import BleakScanner
@@ -30,6 +31,7 @@ class GuitarFretboardApp(QMainWindow):
         super().__init__()
         self.setWindowTitle("Guitar Fretboard - Aeroband")
         self.setGeometry(100, 100, 1200, 700)
+        self.guitar_state = GuitarState()
         
         
         # MIDI handler
@@ -151,14 +153,32 @@ class GuitarFretboardApp(QMainWindow):
         else:
             self.fretboard.set_chord(chord_name)
     
-    def on_note_pressed(self, note, velocity):
+    def on_note_pressed(self, string, fret):
         """Handle MIDI note on"""
-        self.fretboard.add_pressed_note(note)
+        self.guitar_state.strike_string(string, fret)
+        self._state_changed
     
-    def on_note_released(self, note):
+    def on_note_released(self, string, fret):
         """Handle MIDI note off"""
-        self.fretboard.remove_pressed_note(note)
+        self.guitar_state.release_string(string, fret)  
+        self._state_changed
     
+    def on_fret_pressed(self, string, fret):
+        """Handle fret pressed event"""
+        self.guitar_state.press_fret(string, fret)
+        self._state_changed
+
+    def on_fret_released(self, string, fret):
+        """Handle fret released event"""
+        self.guitar_state.release_fret(string, fret)
+        self._state_changed
+
+
+    def _state_changed(self):
+        """Update fretboard display based on guitar state"""
+        self.
+
+
     def closeEvent(self, event):
         """Clean up on close"""
         if self.midi_handler.running:
