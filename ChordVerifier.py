@@ -5,6 +5,7 @@ Verifies if struck strings match a target chord
 
 from typing import Dict, List, Set
 from guitar import GuitarState
+from target_chord import TargetChord
 
 
 class ChordVerifier:

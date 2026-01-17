@@ -202,7 +202,7 @@ class FretboardWidget(QFrame):
                                 # vertical_positions[fret] gives Y, horizontal_positions[string_idx] gives X
                                 y = img_y + self.vertical_positions[5 - string_idx] * scale_y
                                 x = img_x + (self.horizontal_positions[fret - 1] - 5) * scale_x
-                                dot_size = 10 # Fixed size for chord dots
+                                dot_size = 9 # Fixed size for chord dots
                                 painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
                     except (IndexError, TypeError):
                         pass
@@ -215,7 +215,7 @@ class FretboardWidget(QFrame):
                 if fret > 0:
                     y = img_y + self.vertical_positions[string_idx] * scale_y
                     x = img_x + (self.horizontal_positions[fret-1] - 5)* scale_x
-                    dot_size = 10
+                    dot_size = 8
                     painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
 
             # Draw struck strings (active strings) - green
