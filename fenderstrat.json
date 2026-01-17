@@ -12,7 +12,7 @@
     },
     "image" : {
         "image_path": "images/fenderstrat.jpg",
-        "vertical_positions": [65, 79, 89, 101, 112, 123],
+        "vertical_positions": [65, 79, 89, 101, 114, 125],
         "horizontal_positions": [343, 396, 446, 492, 535, 579, 616, 653, 688, 721, 752, 781, 808, 834, 858, 881, 903, 924, 944, 962, 980, 995]
 
 

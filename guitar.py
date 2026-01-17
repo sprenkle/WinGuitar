@@ -53,8 +53,9 @@ class GuitarState:
     
     def release_string(self, string: int) -> None:
         """Record a string being released after being struck"""
-        if 0 <= string < 6:
-            self.strings_struck[string] = 0
+        # if 0 <= string < 6:
+        #     self.strings_struck[string] = 0
+        pass
 
     
     def clear_all(self) -> None:

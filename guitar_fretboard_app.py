@@ -38,6 +38,8 @@ class GuitarFretboardApp(QMainWindow):
         self.midi_handler = MIDIHandler()
         self.midi_handler.midi_note_received.connect(self.on_note_pressed)
         self.midi_handler.midi_note_released.connect(self.on_note_released)
+        self.midi_handler.fret_pressed.connect(self.on_fret_pressed)
+        self.midi_handler.fret_released.connect(self.on_fret_released)
         
         # Device info
         self.ble_devices = {}
@@ -155,28 +157,32 @@ class GuitarFretboardApp(QMainWindow):
     
     def on_note_pressed(self, string, fret):
         """Handle MIDI note on"""
+        print(f"Note Pressed: String {string}, Fret {fret}")
         self.guitar_state.strike_string(string, fret)
-        self._state_changed
+        self._state_changed()
     
-    def on_note_released(self, string, fret):
+    def on_note_released(self, string):
         """Handle MIDI note off"""
-        self.guitar_state.release_string(string, fret)  
-        self._state_changed
+        print(f"Note Released: String {string}")
+        self.guitar_state.release_string(string)  
+        self._state_changed()
     
     def on_fret_pressed(self, string, fret):
         """Handle fret pressed event"""
+        print(f"Fret Pressed: String {string}, Fret {fret}")
         self.guitar_state.press_fret(string, fret)
-        self._state_changed
+        self._state_changed()
 
     def on_fret_released(self, string, fret):
         """Handle fret released event"""
+        print(f"Fret Released: String {string}, Fret {fret}")
         self.guitar_state.release_fret(string, fret)
-        self._state_changed
-
+        self._state_changed()
 
     def _state_changed(self):
         """Update fretboard display based on guitar state"""
-        self.
+        self.fretboard.set_guitar_state(self.guitar_state)
+        self.fretboard.show()
 
 
     def closeEvent(self, event):

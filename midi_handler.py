@@ -12,8 +12,8 @@ except ImportError:
 
 class MIDIHandler(QObject):
     """Handles MIDI input in a separate thread"""
-    midi_note_received = Signal(int, int, int)  # string, fret, note
-    midi_note_released = Signal(int, int)  # string, fret
+    midi_note_received = Signal(int, int)  # string, fret
+    midi_note_released = Signal(int)  # string, fret
     fret_pressed = Signal(int, int)  # string, fret
     fret_released = Signal(int, int)  # string, fret
 
@@ -120,25 +120,27 @@ class MIDIHandler(QObject):
                             if command == 0xF0:  # System exclusive
                                 i += 1
                                 continue
-                            print(f"MIDI Status: {midi_status:02x}, Command: {command:02x}, String: {string}")
+                            # print(f"MIDI Status: {midi_status:02x}, Command: {command:02x}, String: {string}")
                             # 3-byte messages: Note On (0x90), Note Off (0x80), CC (0xB0), Polyphonic Pressure (0xA0)
                             if command in [0x80, 0x90, 0xA0, 0xB0]:
                                 if i + 2 >= len(data):
                                     break
 
-                                fret = self.midi_to_fret_info(note)
                                 note = data[i + 1]
+
+                                fret = self.midi_to_fret_info(string, note)
+
                                 velocity = data[i + 2]
                                 
                                 if command == 0x90:  # Note On
                                     if velocity > 0:
-                                        self.midi_note_received.emit(string, fret, note)
+                                        self.midi_note_received.emit(string, fret)
                                     else:
                                         # Note on with velocity 0 = note off
-                                        self.midi_note_released.emit(string, fret)
+                                        self.midi_note_released.emit(string)
                                 
                                 elif command == 0x80:  # Note Off
-                                    self.midi_note_released.emit(string, fret)
+                                    self.midi_note_released.emit(string)
                                 elif command == 0xB0:  # Control Change
                                     fret_number = data[i+2]
                                     if data[i+1] & 0x01:

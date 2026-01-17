@@ -209,31 +209,24 @@ class FretboardWidget(QFrame):
             # Draw pressed notes (active frets) - bright red
             painter.setBrush(QBrush(QColor(255, 0, 0, 200)))
             painter.setPen(QPen(QColor(200, 0, 0), 3))
-
             for string_idx in range(self.NUM_STRINGS):
                 fret = self.guitar_state.get_fret_pressed(string_idx)
                 if fret > 0:
-                    if fret < len(self.vertical_positions) and string_idx < len(self.horizontal_positions):
-                        y = img_y + self.vertical_positions[5 - string_idx] * scale_y
-                        x = img_x + self.horizontal_positions[fret] * scale_x
-                        dot_size = int(img_width * 0.04)
-                        painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
+                    y = img_y + self.vertical_positions[5 - string_idx] * scale_y
+                    x = img_x + (self.horizontal_positions[fret-1] - 5)* scale_x
+                    dot_size = 10
+                    painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
 
+            # Draw struck strings (active strings) - green
+            painter.setBrush(QBrush(QColor(0, 200, 0, 180)))
+            painter.setPen(QPen(QColor(0, 150, 0), 2))
+            for string_idx in range(self.NUM_STRINGS):
+                if self.guitar_state.is_string_struck(string_idx):
+                    y = img_y + self.vertical_positions[5 - string_idx] * scale_y
+                    x0 = img_x + self.horizontal_positions[0] * scale_x - 100
+                    x1 = img_x + self.horizontal_positions[-1] * scale_x
+                    painter.drawLine(int(x0), int(y-1), int(x1), int(y+1))
 
-            # for note in self.pressed_notes:
-            #     try:
-            #         result = self.get_fret_for_note(note)
-            #         if result:
-            #             string_idx, fret = result
-            #             if string_idx < len(self.horizontal_positions) and fret < len(self.vertical_positions):
-            #                 # vertical_positions[fret] gives Y, horizontal_positions[string_idx] gives X
-            #                 y = img_y + self.horizontal_positions[string_idx] * scale_y
-            #                 y = img_y + self.vertical_positions[fret] * scale_y
-            #                 x = img_x + self.horizontal_positions[string_idx] * scale_x
-            #                 dot_size = int(img_width * 0.03)
-            #                 painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
-            #     except (IndexError, TypeError):
-            #         pass
                     
         except Exception as e:
             print(f"Error drawing guitar image: {e}")
@@ -248,6 +241,7 @@ class FretboardWidget(QFrame):
 if __name__ == '__main__':
     """Test the FretboardWidget by displaying a C note"""
     from PySide6.QtWidgets import QApplication
+    import time
     
     app = QApplication([])
     
@@ -258,11 +252,29 @@ if __name__ == '__main__':
     widget.set_chord('E Major')
     
     guitar_state = GuitarState()
-    guitar_state.press_fret(5, 4)  # High E string open
-    guitar_state.strike_string(5, 0)    
+    guitar_state.press_fret(0, 1)  # High E string open
+    guitar_state.press_fret(1, 2)  # High E string open
+    guitar_state.press_fret(3, 3)  # High E string open
+    guitar_state.press_fret(4, 4)  # High E string open
+    guitar_state.press_fret(5, 19)  # High E string open
+    guitar_state.strike_string(0, 3)    
+    guitar_state.strike_string(1, 22)    
+    guitar_state.strike_string(2, 19)    
+    guitar_state.strike_string(3, 22)    
+    guitar_state.strike_string(4, 19)    
+    guitar_state.strike_string(5, 19)    
     widget.set_guitar_state(guitar_state)
 
     widget.show()
-    
+    # time.sleep(5)
+    # guitar_state.release_fret(0, 1)  # High E string open
+    # guitar_state.release_fret(1, 2)  # High E string open
+    # guitar_state.release_fret(3, 3)  # High E string open
+    # guitar_state.release_fret(4, 4)  # High E string open
+    # widget.show()
+
+
+
+
     # Exit when window is closed
     app.exec()
