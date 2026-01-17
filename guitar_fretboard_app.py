@@ -17,6 +17,7 @@ from PySide6.QtWidgets import QFrame
 from fretboard_widget import FretboardWidget
 from midi_handler import MIDIHandler
 from guitar import GuitarState
+from ChordVerifier import ChordVerifier
 
 try:
     from bleak import BleakScanner
@@ -30,7 +31,19 @@ class GuitarFretboardApp(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Guitar Fretboard - Aeroband")
-        self.setGeometry(100, 100, 1200, 700)
+        
+        # Detect screen size and fit window
+        screen = QApplication.primaryScreen()
+        available_geometry = screen.availableGeometry()
+        
+        # Use 85% of available screen width and height with margins
+        margin = 20
+        width = int(available_geometry.width() * 0.85)
+        height = int(available_geometry.height() * 0.85)
+        x = margin
+        y = margin
+        
+        self.setGeometry(x, y, width, height)
         self.guitar_state = GuitarState()
         
         
@@ -82,6 +95,15 @@ class GuitarFretboardApp(QMainWindow):
         
         # Auto-connect to Aeroband on startup
         QTimer.singleShot(500, self.auto_connect_aeroband)
+
+        # Chord detection timer
+        self.chord_timer = QTimer()
+        self.chord_timer.setSingleShot(True)  # Timer fires once then stops
+        self.chord_timer.timeout.connect(self.finished_chord)
+        self.chord_timeout_ms = 250  # 250ms timeout
+        self.verifier = ChordVerifier()
+
+
     
     def _log(self, msg):
         """Log to file and console"""
@@ -158,13 +180,19 @@ class GuitarFretboardApp(QMainWindow):
     def on_note_pressed(self, string, fret):
         """Handle MIDI note on"""
         print(f"Note Pressed: String {string}, Fret {fret}")
+        # Reset the chord detection timer whenever a string is struck
+        self.chord_timer.stop()
+        self.chord_timer.start(self.chord_timeout_ms)
+
         self.guitar_state.strike_string(string, fret)
+        print(f"Current Guitar State: {self.guitar_state.get_summary()}")
         self._state_changed()
     
     def on_note_released(self, string):
         """Handle MIDI note off"""
         print(f"Note Released: String {string}")
         self.guitar_state.release_string(string)  
+        print(f"Current Guitar State: {self.guitar_state.get_summary()}")
         self._state_changed()
     
     def on_fret_pressed(self, string, fret):
@@ -183,6 +211,34 @@ class GuitarFretboardApp(QMainWindow):
         """Update fretboard display based on guitar state"""
         self.fretboard.set_guitar_state(self.guitar_state)
         self.fretboard.show()
+
+    def finished_chord(self):
+        """Called when chord playing is finished (250ms after last string struck)"""
+        print("Chord finished!")
+        print(f"Final chord state: {self.guitar_state.get_summary()}")
+        # Verify the chord
+        current_chord = self.chord_combo.currentText()
+        if current_chord != 'None':
+            
+            if self.verifier.verify():
+                print(f"✓ CORRECT: {current_chord} played perfectly!")
+            else:
+                accuracy = self.verifier.get_accuracy()
+                errors = self.verifier.get_errors()
+                print(f"✗ INCORRECT: {current_chord} - Accuracy: {accuracy*100:.0f}%")
+                for string_idx, error in errors.items():
+                    print(f"  {error}")
+
+
+
+
+
+        self.guitar_state.clear_strings()
+        self._state_changed()
+        # Add your chord completion logic here
+        # For example: score the chord, log it, play a sound, etc.
+
+
 
 
     def closeEvent(self, event):

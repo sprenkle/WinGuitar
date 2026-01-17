@@ -704,3 +704,684 @@ Found 25 devices
     -> Found Aeroband!
 Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
 Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 24 devices
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: None (6B:CD:FE:2B:6A:EF)
+  Device: None (48:C3:69:33:BF:50)
+  Device: None (6D:91:0A:AA:44:88)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: None (3C:0B:59:EE:8B:C9)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: None (6F:6F:B9:FF:14:3A)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (6E:12:2D:06:EC:77)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (6E:06:96:08:E3:DF)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 27 devices
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: None (56:95:3B:7E:EF:30)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (D9:7B:83:85:66:6C)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (4C:DC:50:DC:91:1F)
+  Device: None (6B:C7:49:E0:2D:8E)
+  Device: None (6F:43:20:E0:7B:2B)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: None (66:37:27:7A:BD:A8)
+  Device: None (51:FF:A4:20:61:BF)
+  Device: None (D4:EA:61:76:C7:E9)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 27 devices
+  Device: None (63:A7:57:7E:72:59)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: None (59:B3:23:0A:29:B5)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (56:95:3B:7E:EF:30)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: None (64:86:51:7A:EA:BC)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: None (66:97:43:00:DC:97)
+  Device: None (66:37:27:7A:BD:A8)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: TUYA_ (3C:0B:59:EE:8B:C9)
+  Device: None (6B:C7:49:E0:2D:8E)
+  Device: None (5C:49:7D:7B:7A:3D)
+  Device: None (51:FF:A4:20:61:BF)
+  Device: None (58:07:45:0D:82:A4)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 26 devices
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: None (6B:C7:49:E0:2D:8E)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: None (56:95:3B:7E:EF:30)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: None (59:B3:23:0A:29:B5)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (66:37:27:7A:BD:A8)
+  Device: None (5C:49:7D:7B:7A:3D)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: None (66:97:43:00:DC:97)
+  Device: None (51:FF:A4:20:61:BF)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: TUYA_ (3C:0B:59:EE:8B:C9)
+  Device: None (F8:A4:36:61:A9:A9)
+  Device: None (4C:DC:50:DC:91:1F)
+  Device: None (D9:7B:83:85:66:6C)
+  Device: None (64:86:51:7A:EA:BC)
+  Device: None (58:07:45:0D:82:A4)
+No Aeroband found, will retry in 5 seconds
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 27 devices
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: None (64:86:51:7A:EA:BC)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: None (51:FF:A4:20:61:BF)
+  Device: None (3C:0B:59:EE:8B:C9)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: None (56:95:3B:7E:EF:30)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: None (D8:B7:8D:0F:D9:5F)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 25 devices
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: None (56:95:3B:7E:EF:30)
+  Device: None (4C:DC:50:DC:91:1F)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: None (51:FF:A4:20:61:BF)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: None (66:97:43:00:DC:97)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (64:86:51:7A:EA:BC)
+  Device: None (6B:C7:49:E0:2D:8E)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 27 devices
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (62:F9:6B:FF:2F:D3)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: None (65:95:E2:0B:98:3B)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: None (4B:79:0E:EA:EB:FE)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (6B:C7:49:E0:2D:8E)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: None (64:86:51:7A:EA:BC)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (D4:EA:61:76:C7:E9)
+  Device: None (58:07:45:0D:82:A4)
+  Device: None (66:97:43:00:DC:97)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: None (51:FF:A4:20:61:BF)
+  Device: TUYA_ (3C:0B:59:EE:8B:C9)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: None (5C:49:7D:7B:7A:3D)
+  Device: None (4E:52:73:39:E4:AA)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: None (4C:DC:50:DC:91:1F)
+  Device: None (56:95:3B:7E:EF:30)
+No Aeroband found, will retry in 5 seconds
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 26 devices
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: None (4C:DC:50:DC:91:1F)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: None (51:FF:A4:20:61:BF)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: TUYA_ (3C:0B:59:EE:8B:C9)
+  Device: None (64:86:51:7A:EA:BC)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: A Major
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 27 devices
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: None (64:86:51:7A:EA:BC)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: A Major
+Chord changed to: G Major
+Chord changed to: C Major
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 29 devices
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: None (7B:6C:3A:4B:9F:E6)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (66:97:43:00:DC:97)
+  Device: None (62:F9:6B:FF:2F:D3)
+  Device: None (75:CD:07:CF:F1:59)
+  Device: None (DF:32:AF:27:27:25)
+  Device: None (65:95:E2:0B:98:3B)
+  Device: None (D8:B7:8D:0F:D9:5F)
+  Device: None (4E:52:73:39:E4:AA)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: None (C6:02:41:28:48:DA)
+  Device: None (64:86:51:7A:EA:BC)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (58:07:45:0D:82:A4)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: D Major
+Chord changed to: Em
+Chord changed to: F Major
+Chord changed to: Am
+Chord changed to: F Major
+Chord changed to: G Major
+Chord changed to: C Major
+Chord changed to: F Major
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 25 devices
+  Device: None (65:95:E2:0B:98:3B)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: None (6D:D3:59:7E:A2:3D)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: None (60:1D:5F:90:14:D7)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: C Major
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 26 devices
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 27 devices
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: None (6C:5E:58:90:67:21)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (51:97:28:84:2D:30)
+  Device: None (44:1E:F0:B4:29:64)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: None (4B:0E:10:3B:18:20)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: None (6E:12:CB:20:88:8F)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (51:91:41:06:42:1B)
+  Device: None (3C:0B:59:EE:8B:C9)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: None (4A:27:5E:2E:BB:F0)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 28 devices
+  Device: None (FA:0A:42:8B:5E:B7)
+  Device: None (51:91:41:06:42:1B)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: None (6C:5E:58:90:67:21)
+  Device: None (4B:0E:10:3B:18:20)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: None (63:D1:B6:4D:78:D4)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (3C:0B:59:EE:8B:C9)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: None (51:97:28:84:2D:30)
+  Device: None (6E:12:CB:20:88:8F)
+  Device: None (5F:E3:8D:4C:9F:D7)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (5D:C9:39:82:D2:D2)
+  Device: None (54:83:97:9A:A5:B8)
+  Device: None (74:99:62:4F:8A:16)
+  Device: None (5A:31:8E:00:F1:D9)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 26 devices
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: None (51:91:41:06:42:1B)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: None (5D:C9:39:82:D2:D2)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 26 devices
+  Device: None (73:98:0B:EB:BC:62)
+  Device: None (40:85:11:D6:A8:FF)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (40:EC:61:AB:3A:D4)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: None (F9:24:C3:5B:C9:99)
+  Device: None (60:34:50:6A:AE:0A)
+  Device: None (4C:2A:67:ED:83:0A)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (70:14:57:02:2E:1A)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (C4:80:58:55:48:45)
+  Device: None (49:45:29:E4:6B:63)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: None (62:68:33:B8:FC:0E)
+  Device: TUYA_ (3C:0B:59:EE:8B:C9)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 26 devices
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (60:34:50:6A:AE:0A)
+  Device: None (73:7E:44:0D:A2:90)
+  Device: None (40:EC:61:AB:3A:D4)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: None (45:44:E6:59:0A:94)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 26 devices
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: None (73:7E:44:0D:A2:90)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: None (5D:E6:61:00:90:9D)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: None (73:2C:30:8F:C1:22)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: None (4C:2A:67:ED:83:0A)
+  Device: None (40:85:11:D6:A8:FF)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: None (4C:65:BA:DA:41:53)
+  Device: None (41:F6:5F:02:BB:E4)
+  Device: None (70:14:57:02:2E:1A)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: None (F4:3A:16:C5:19:DC)
+  Device: None (60:34:50:6A:AE:0A)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 27 devices
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 24 devices
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (73:7E:44:0D:A2:90)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: None (41:F6:5F:02:BB:E4)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: None (7D:F3:B6:9B:59:21)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: None (50:01:6B:30:9C:11)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: None (60:34:50:6A:AE:0A)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 27 devices
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (4C:9D:E3:7F:9C:D0)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: TUYA_ (3C:0B:59:EE:8B:C9)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (5D:E6:61:00:90:9D)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (41:F6:5F:02:BB:E4)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: None (C3:A8:6C:A6:12:BB)
+  Device: None (5F:38:76:61:3A:16)
+  Device: None (F4:3A:16:C5:19:DC)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: None (7D:F3:B6:9B:59:21)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 29 devices
+  Device: None (47:D5:DE:A5:6F:44)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: None (6D:04:C8:E4:9A:3E)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (7D:6B:7A:B9:23:48)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (47:81:EC:AF:40:0E)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: TUYA_ (3C:0B:59:EE:8B:C9)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: None (5E:7D:9A:E8:4E:16)
+  Device: None (47:C5:E3:1D:64:23)
+  Device: None (73:33:7D:00:15:A2)
+  Device: None (74:94:A2:77:6B:98)
+  Device: DREOtf05gCF (00:1C:C2:80:AC:D0)
+  Device: None (E3:59:93:BD:35:87)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 33 devices
+  Device: None (73:73:AE:D0:E0:08)
+  Device: None (D8:FA:75:7F:32:05)
+  Device: None (47:D5:DE:A5:6F:44)
+  Device: None (54:B4:1B:CF:EE:93)
+  Device: None (7D:6B:7A:B9:23:48)
+  Device: None (5E:7D:9A:E8:4E:16)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: None (74:94:A2:77:6B:98)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: TUYA_ (3C:0B:59:EE:8B:C9)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: None (44:06:45:89:2B:1F)
+  Device: None (47:C5:E3:1D:64:23)
+  Device: None (5C:49:7D:7B:7A:3D)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 32 devices
+  Device: None (A8:51:AB:9C:17:68)
+  Device: None (73:33:7D:00:15:A2)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: TUYA_ (3C:0B:59:EE:99:62)
+  Device: None (73:73:AE:D0:E0:08)
+  Device: None (78:5F:3B:97:65:F6)
+  Device: TUYA_ (3C:0B:59:EE:8B:C9)
+  Device: None (5E:7D:9A:E8:4E:16)
+  Device: None (54:B4:1B:CF:EE:93)
+  Device: DREOtf05gCF (00:1C:C2:80:AC:D0)
+  Device: None (44:06:45:89:2B:1F)
+  Device: None (3C:0B:59:EE:8B:3F)
+  Device: None (47:C5:E3:1D:64:23)
+  Device: None (4E:E5:0B:5B:A5:B3)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: None (74:94:A2:77:6B:98)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (D8:B7:8D:0F:D9:5F)
+  Device: None (7D:6B:7A:B9:23:48)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 33 devices
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (5E:7D:9A:E8:4E:16)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: TUYA_ (3C:0B:59:EE:8B:C9)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: None (54:B4:1B:CF:EE:93)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 33 devices
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: TUYA_ (3C:0B:59:EE:8B:C9)
+  Device: None (4E:E5:0B:5B:A5:B3)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: None (44:06:45:89:2B:1F)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: None (54:B4:1B:CF:EE:93)
+  Device: None (5E:7D:9A:E8:4E:16)
+  Device: None (5C:49:7D:7B:7A:3D)
+  Device: None (6D:04:C8:E4:9A:3E)
+  Device: None (74:94:A2:77:6B:98)
+  Device: DREOtf05gCF (00:1C:C2:80:AC:D0)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: None (C0:23:8D:E6:DD:4C)
+  Device: None (C5:21:A0:3D:C8:FD)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: None (47:C5:E3:1D:64:23)
+  Device: None (73:73:AE:D0:E0:08)
+  Device: None (7D:6B:7A:B9:23:48)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: FB1784 (0C:4E:A0:4B:13:AA)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 30 devices
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: None (54:B4:1B:CF:EE:93)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 31 devices
+  Device: None (6D:04:C8:E4:9A:3E)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: S17 54DA LE (E7:A7:59:FE:77:A7)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!

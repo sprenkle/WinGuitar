@@ -32,7 +32,7 @@ class FretboardWidget(QFrame):
     
     def __init__(self):
         super().__init__()
-        self.setMinimumSize(QSize(1600, 1000))
+        self.setMinimumSize(QSize(600, 400))
         self.pressed_notes = set()  # MIDI notes currently pressed
         self.chord_name = None
         self.chord_frets = {}  # Fret positions for the selected chord
@@ -136,6 +136,7 @@ class FretboardWidget(QFrame):
         self.chord_name = chord_name
         if chord_name in self.CHORD_PRESETS:
             self.chord_frets = self.CHORD_PRESETS[chord_name]
+            self.guitar_state.clear_all()
         self.update()
     
     def get_fret_for_note(self, midi_note):
@@ -212,7 +213,7 @@ class FretboardWidget(QFrame):
             for string_idx in range(self.NUM_STRINGS):
                 fret = self.guitar_state.get_fret_pressed(string_idx)
                 if fret > 0:
-                    y = img_y + self.vertical_positions[5 - string_idx] * scale_y
+                    y = img_y + self.vertical_positions[string_idx] * scale_y
                     x = img_x + (self.horizontal_positions[fret-1] - 5)* scale_x
                     dot_size = 10
                     painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
