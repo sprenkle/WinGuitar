@@ -9,24 +9,6 @@ from guitar import GuitarState
 class FretboardWidget(QFrame):
     """Custom widget to draw the guitar fretboard"""
     
-    # Standard tuning MIDI notes (lowest to highest string)
-    STANDARD_TUNING = [40, 45, 50, 55, 59, 64]  # E2, A2, D3, G3, B3, E4
-    NUM_FRETS = 24
-    NUM_STRINGS = 6
-    
-    CHORD_PRESETS = {
-        'E Major': {0: [0, 2, 2, 1, 0, 0]},
-        'A Major': {0: [0, 0, 2, 2, 2, 0]},
-        'D Major': {0: [2, 3, 2, 0, 0, 0]},
-        'G Major': {0: [3, 2, 0, 0, 0, 3]},
-        'C Major': {0: [0, 3, 2, 0, 1, 0]},
-        'F Major': {0: [1, 3, 3, 2, 1, 1]},
-        'Em': {0: [0, 2, 2, 0, 1, 0]},
-        'Am': {0: [0, 0, 2, 2, 1, 0]},
-        'Dm': {0: [2, 3, 2, 0, 0, 0]},
-        'Gm': {0: [3, 5, 5, 3, 3, 3]},
-    }
-    
     # Signal for thread-safe updates
     repaint_signal = Signal()
     
@@ -36,9 +18,15 @@ class FretboardWidget(QFrame):
         self.pressed_notes = set()  # MIDI notes currently pressed
         self.chord_name = None
         self.chord_frets = {}  # Fret positions for the selected chord
+        self.strings_to_strike = []  # Indices of strings that should be struck (0-5)
 
         self.guitar_state = GuitarState()
 
+        # Initialize config values (will be set by load_config)
+        self.STANDARD_TUNING = [40, 45, 50, 55, 59, 64]  # Default
+        self.NUM_FRETS = 24
+        self.NUM_STRINGS = 6
+        self.CHORD_PRESETS = {}
 
         # Initialize image and config
         self.guitar_image = QPixmap()
@@ -66,6 +54,15 @@ class FretboardWidget(QFrame):
             
             with open(config_path, 'r') as f:
                 self.config = json.load(f)
+                
+            # Load guitar parameters from config
+            self.STANDARD_TUNING = self.config.get('standard_tuning', [40, 45, 50, 55, 59, 64])
+            self.NUM_FRETS = self.config.get('number_of_frets', 24)
+            self.NUM_STRINGS = self.config.get('number_of_strings', 6)
+            
+            # Build CHORD_PRESETS from chord_shapes in config
+            chord_shapes = self.config.get('chord_shapes', {})
+            self.CHORD_PRESETS = {name: {0: frets} for name, frets in chord_shapes.items()}
                 
             # Extract fret and string positions from JSON
             image_config = self.config.get('image', {})
@@ -106,10 +103,7 @@ class FretboardWidget(QFrame):
                 self.has_image = True
             
             print(f"Loaded config: {len(self.vertical_positions)} vertical positions, {len(self.horizontal_positions)} horizontal positions")
-            
-            # Update NUM_FRETS from config if available
-            self.NUM_FRETS = self.config.get('number_of_frets', 24)
-            self.NUM_STRINGS = self.config.get('number_of_strings', 6)
+            print(f"Loaded {len(self.CHORD_PRESETS)} chord presets from config")
             
         except FileNotFoundError as e:
             print(f"Warning: fenderstrat.json not found - {e}")
@@ -131,9 +125,10 @@ class FretboardWidget(QFrame):
         self.guitar_state = guitar_state
         self.update()
     
-    def set_chord(self, chord_name):
+    def set_chord(self, chord_name, strings_to_strike=None):
         """Set the chord to display"""
         self.chord_name = chord_name
+        self.strings_to_strike = strings_to_strike if strings_to_strike else []
         if chord_name in self.CHORD_PRESETS:
             self.chord_frets = self.CHORD_PRESETS[chord_name]
             self.guitar_state.clear_all()
@@ -207,8 +202,10 @@ class FretboardWidget(QFrame):
                     except (IndexError, TypeError):
                         pass
             
-            # Draw pressed notes (active frets) - bright red
-            painter.setBrush(QBrush(QColor(255, 0, 0, 200)))
+          
+
+
+            # Draw pressed notes (active frets) - green if correct, red if wrong
             painter.setPen(QPen(QColor(200, 0, 0), 3))
             for string_idx in range(self.NUM_STRINGS):
                 fret = self.guitar_state.get_fret_pressed(string_idx)
@@ -216,21 +213,54 @@ class FretboardWidget(QFrame):
                     y = img_y + self.vertical_positions[string_idx] * scale_y
                     x = img_x + (self.horizontal_positions[fret-1] - 5)* scale_x
                     dot_size = 8
+                    
+                    # Check if this fret matches the target chord
+                    is_correct = False
+                    if self.chord_frets:
+                        # Get the expected fret for this string from the chord
+                        expected_fret = self.chord_frets.get(0, [])[5-string_idx] if 0 in self.chord_frets else -1
+                        is_correct = (fret == expected_fret and expected_fret != -1)
+                    
+                    # Color green if correct chord fret, red if wrong
+                    if is_correct:
+                        painter.setBrush(QBrush(QColor(0, 255, 0, 200)))  # Green for correct
+                    else:
+                        painter.setBrush(QBrush(QColor(255, 0, 0, 200)))  # Red for wrong
+                    
                     painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
 
             # Draw struck strings (active strings) - green
             painter.setBrush(QBrush(QColor(0, 200, 0, 180)))
-            painter.setPen(QPen(QColor(0, 150, 0), 2))
+            painter.setPen(QPen(QColor(0, 150, 0), 6))
             for string_idx in range(self.NUM_STRINGS):
                 if self.guitar_state.is_string_struck(string_idx):
-                    y = img_y + self.vertical_positions[5 - string_idx] * scale_y
+                    y = img_y + self.vertical_positions[string_idx] * scale_y
                     x0 = img_x + self.horizontal_positions[0] * scale_x - 100
                     x1 = img_x + self.horizontal_positions[-1] * scale_x
                     painter.drawLine(int(x0), int(y-1), int(x1), int(y+1))
 
+            # Draw string strike indicators (marks on the left side of the fretboard)
+            if self.chord_frets:
+                for string_idx in range(self.NUM_STRINGS):
+                    y = img_y + self.vertical_positions[string_idx] * scale_y - 10
+                    x = img_x + (self.horizontal_positions[0] - 50) * scale_x
+                    
+                    if self.chord_frets.get(0, [])[5-string_idx] == 0:
+                        # Draw a checkmark for strings that should be struck
+                        painter.setPen(QPen(QColor(0, 150, 0), 3))  # Green
+                        painter.setFont(QFont('Arial', 14, QFont.Bold))
+                        painter.drawText(int(x), int(y), 40, 20, Qt.AlignCenter, 'O')
+                    elif self.chord_frets.get(0, [])[5-string_idx] == -1:
+                        # Draw an X for strings that should NOT be struck (muted)
+                        painter.setPen(QPen(QColor(200, 0, 0), 3))  # Red
+                        painter.setFont(QFont('Arial', 14, QFont.Bold))
+                        painter.drawText(int(x), int(y), 40, 20, Qt.AlignCenter, '✕')
+
                     
         except Exception as e:
             print(f"Error drawing guitar image: {e}")
+        finally:
+            painter.end()
     
     def _midi_to_note(self, midi_note):
         """Convert MIDI note number to note name"""
@@ -253,17 +283,17 @@ if __name__ == '__main__':
     widget.set_chord('E Major')
     
     guitar_state = GuitarState()
-    guitar_state.press_fret(0, 1)  # High E string open
-    guitar_state.press_fret(1, 2)  # High E string open
-    guitar_state.press_fret(3, 3)  # High E string open
-    guitar_state.press_fret(4, 4)  # High E string open
-    guitar_state.press_fret(5, 19)  # High E string open
-    guitar_state.strike_string(0, 3)    
-    guitar_state.strike_string(1, 22)    
-    guitar_state.strike_string(2, 19)    
-    guitar_state.strike_string(3, 22)    
-    guitar_state.strike_string(4, 19)    
-    guitar_state.strike_string(5, 19)    
+    # guitar_state.press_fret(0, 1)  # High E string open
+    # guitar_state.press_fret(1, 2)  # High E string open
+    # guitar_state.press_fret(3, 3)  # High E string open
+    # guitar_state.press_fret(4, 4)  # High E string open
+    # guitar_state.press_fret(5, 19)  # High E string open
+    # guitar_state.strike_string(0, 3)    
+    # guitar_state.strike_string(1, 22)    
+    # guitar_state.strike_string(2, 19)    
+    # guitar_state.strike_string(3, 22)    
+    # guitar_state.strike_string(4, 19)    
+    # guitar_state.strike_string(5, 19)    
     widget.set_guitar_state(guitar_state)
 
     widget.show()

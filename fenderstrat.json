@@ -2,14 +2,8 @@
     "guitar_model": "Fender Stratocaster",
     "number_of_strings": 6,
     "number_of_frets": 22,
+    "standard_tuning": [64, 59, 55, 50, 45, 40],
     "tuning": ["E4", "B3", "G3", "D3", "A2", "E2"],
-    "chord_shapes": {
-        "C Major": [0, 1, 0, 2, 3, -1],
-        "G Major": [3, 0, 0, 0, 2, 3],
-        "D Major": [-1, -1, 0, 2, 3, 2],
-        "A Minor": [0, 1, 2, 2, 0, -1],
-        "E Minor": [0, 0, 0, 2, 2, 0]
-    },
     "image" : {
         "image_path": "images/fenderstrat.jpg",
         "vertical_positions": [65, 79, 89, 101, 114, 125],

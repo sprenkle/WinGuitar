@@ -3,13 +3,14 @@
   ["All D", ["Dm", "Dsus2", "D", "D5", "D7", "D6/9", "D7/F#"]],
   ["Open G", ["G", "C", "D", "Em"]],
   ["G Major", ["G", "D", "Em", "C"]],
-  ["All Chords", ["A", "Am", "A7", "B", "Bm", "B7", "C", "C7", "D", "Dm", "D7", "E", "Em", "E7", "F", "Fm", "F7", "G", "Gm", "G7", "D6/9", "G/B", "Am7", "D7/F#"]],
+  ["All Chords", ["A", "Am", "A7", "Ab", "B", "Bm", "B7", "C", "C7", "D", "Dm", "D7", "Db", "Dbsus4", "Db/F", "E", "Em", "E7", "Eb", "F", "Fm", "F7", "G", "Gm", "G7", "Gb", "D6/9", "G/B", "Am7", "D7/F#"]],
   ["A Major & 7", ["A", "A7", "Am"]],
   ["B Major & 7", ["B", "B7", "Bm"]],
   ["C Major & 7", ["C", "C7"]],
   ["D Major & 7", ["D", "D7", "Dm"]],
   ["E Major & 7", ["E", "E7", "Em"]],
   ["F Major & 7", ["F", "F7", "Fm"]],
-  ["G Major & 7", ["G", "G7", "Gm"]]
+  ["G Major & 7", ["G", "G7", "Gm"]],
+  ["Flat Chords", ["Ab", "Db", "Dbsus4", "Db/F", "Eb", "Gb"]]
 ]
 

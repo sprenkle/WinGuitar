@@ -18,6 +18,7 @@ from fretboard_widget import FretboardWidget
 from midi_handler import MIDIHandler
 from guitar import GuitarState
 from ChordVerifier import ChordVerifier
+from practice_library import PracticeLibrary
 
 try:
     from bleak import BleakScanner
@@ -42,7 +43,7 @@ class GuitarFretboardApp(QMainWindow):
         
         # Use 85% of available screen width and height with margins
         margin = 20
-        width = int(available_geometry.width() * 0.85)
+        width = 1000 #int(available_geometry.width() * 0.85)
         height = int(available_geometry.height() * 0.85)
         x = margin
         y = margin
@@ -63,18 +64,37 @@ class GuitarFretboardApp(QMainWindow):
         self.aeroband_address = None
         self.aeroband_name = None
         
+        # Practice mode state (initialize early, before UI creation)
+        self.practice_chords = []   # List of chords to practice
+        self.current_practice_idx = 0  # Current chord index
+        self.practice_name = ""  # Current practice name
+        
         # Create UI
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         layout = QVBoxLayout(central_widget)
         
+        # Create fretboard first so we can access its CHORD_PRESETS
+        self.fretboard = FretboardWidget()
+        
         # Control panel (simplified)
         control_layout = QHBoxLayout()
         
+        # Practice selector (from PracticeLibrary)
+        self.practice_library = PracticeLibrary()
+        control_layout.addWidget(QLabel("Practice:"))
+        self.practice_combo = QComboBox()
+        self.practice_combo.currentTextChanged.connect(self.on_practice_changed)
+        # Block signals while adding items to avoid triggering on_practice_changed with empty strings
+        self.practice_combo.blockSignals(True)
+        self.practice_combo.addItems(self.practice_library.get_collection_names())
+        self.practice_combo.blockSignals(False)
+        control_layout.addWidget(self.practice_combo)
+        
         # Chord selector
-        control_layout.addWidget(QLabel("Practice Chord:"))
+        control_layout.addWidget(QLabel("Chord:"))
         self.chord_combo = QComboBox()
-        self.chord_combo.addItems(['None'] + list(FretboardWidget.CHORD_PRESETS.keys()))
+        self.chord_combo.addItems(['None'] + list(self.fretboard.CHORD_PRESETS.keys()))
         self.chord_combo.setCurrentText('E Major')
         self.chord_combo.currentTextChanged.connect(self.on_chord_changed)
         control_layout.addWidget(self.chord_combo)
@@ -88,12 +108,15 @@ class GuitarFretboardApp(QMainWindow):
         
         layout.addLayout(control_layout)
         
-        # Fretboard widget
-        self.fretboard = FretboardWidget()
+        # Add fretboard widget to layout
         layout.addWidget(self.fretboard)
         
         # Trigger initial chord display after fretboard is created
         self.on_chord_changed('E Major')
+        
+        # Manually trigger to load the first practice collection after fretboard is ready
+        if self.practice_combo.count() > 0:
+            self.on_practice_changed(self.practice_combo.currentText())
         
         # MIDI thread (use QThread to host the QObject)
         self.midi_thread = None
@@ -219,6 +242,21 @@ class GuitarFretboardApp(QMainWindow):
         else:
             self.fretboard.set_chord(chord_name)
     
+    def on_practice_changed(self, practice_name):
+        """Handle practice selection change"""
+        self._log(f"Practice changed to: {practice_name}")
+        self.practice_name = practice_name
+        
+        # Load practice chords
+        print(f"[DEBUG] Available collections: {self.practice_library.get_collection_names()}")
+        print(f"[DEBUG] Requesting collection: '{practice_name}'")
+        collection = self.practice_library.get_collection(practice_name)
+        print(f"[DEBUG] Got collection: {collection}")
+        self.practice_chords = collection or []
+        print(f"[DEBUG] practice_chords populated with {len(self.practice_chords)} chords: {[c.name for c in self.practice_chords]}")
+        self.current_practice_idx = 0
+        self._load_next_practice_chord()
+    
     def on_note_pressed(self, string, fret):
         """Handle MIDI note on"""
         print(f"Note Pressed: String {string}, Fret {fret}")
@@ -227,6 +265,7 @@ class GuitarFretboardApp(QMainWindow):
         self.chord_timer.start(self.chord_timeout_ms)
 
         self.guitar_state.strike_string(string, fret)
+        self.guitar_state.press_fret(string, fret)
         print(f"Current Guitar State: {self.guitar_state.get_summary()}")
         self._state_changed()
     
@@ -253,32 +292,62 @@ class GuitarFretboardApp(QMainWindow):
         """Update fretboard display based on guitar state"""
         self.fretboard.set_guitar_state(self.guitar_state)
         self.fretboard.show()
+    
+    def _load_next_practice_chord(self):
+        """Load the next chord in the practice sequence"""
+        print(f"[DEBUG] _load_next_practice_chord: idx={self.current_practice_idx}, total={len(self.practice_chords)}")
+        if self.current_practice_idx < len(self.practice_chords):
+            target_chord = self.practice_chords[self.current_practice_idx]
+            self._log(f"Practice [{self.current_practice_idx + 1}/{len(self.practice_chords)}]: {target_chord.name}")
+            
+            # Set the chord on the fretboard
+            # We need to pass the frets in the format expected by set_chord
+            # which is {0: [fret0, fret1, ...]}
+            self.fretboard.chord_name = target_chord.name
+            self.fretboard.chord_frets = {0: target_chord.frets}
+            self.fretboard.strings_to_strike = target_chord.strings_to_strike
+            self.fretboard.update()
+            
+            self.chord_combo.blockSignals(True)
+            self.chord_combo.setCurrentText(target_chord.name)
+            self.chord_combo.blockSignals(False)
+        else:
+            # Loop back to the beginning
+            self._log(f"✓ Completed practice: {self.practice_name}! Restarting...")
+            self.current_practice_idx = 0
+            self._load_next_practice_chord()
 
     def finished_chord(self):
         """Called when chord playing is finished (250ms after last string struck)"""
         print("Chord finished!")
         print(f"Final chord state: {self.guitar_state.get_summary()}")
-        # Verify the chord
-        current_chord = self.chord_combo.currentText()
-        if current_chord != 'None':
-            
-            if True: #self.verifier.verify():
-                print(f"✓ CORRECT: {current_chord} played perfectly!")
+        
+        # Get the current target chord
+        if self.current_practice_idx < len(self.practice_chords):
+            target_chord = self.practice_chords[self.current_practice_idx]
+            current_chord_name = target_chord.name
+            target_frets = target_chord.frets
+            target_strings = target_chord.strings_to_strike
+        else:
+            current_chord_name = self.chord_combo.currentText()
+            target_frets = None
+            target_strings = None
+        
+        if current_chord_name != 'None' and target_frets is not None:
+            strings_matched, frets_matched = self.verifier.verify(target_frets, target_strings, self.guitar_state)
+            if frets_matched and strings_matched:
+                print(f"✓ CORRECT: {current_chord_name} played perfectly!")
+                # Move to next chord
+                self.current_practice_idx += 1
+                QTimer.singleShot(500, self._load_next_practice_chord)
             else:
-                accuracy = self.verifier.get_accuracy()
                 errors = self.verifier.get_errors()
-                print(f"✗ INCORRECT: {current_chord} - Accuracy: {accuracy*100:.0f}%")
+                print(f"✗ INCORRECT: {current_chord_name}")
                 for string_idx, error in errors.items():
                     print(f"  {error}")
 
-
-
-
-
         self.guitar_state.clear_strings()
         self._state_changed()
-        # Add your chord completion logic here
-        # For example: score the chord, log it, play a sound, etc.
 
 
 

@@ -1,68 +1,63 @@
 
-# Note names
-NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-
-# Standard tuning: String 1 (high E) = MIDI 64, String 2 (B) = 59, String 3 (G) = 55, 
-# String 4 (D) = 50, String 5 (A) = 45, String 6 (low E) = 40
-OPEN_STRING_NOTES = [64, 59, 55, 50, 45, 40]  # Strings 1-6
-
-# # MIDI notes that make up each chord
-# CHORD_MIDI_NOTES = {
-#     'A':   [64, 61, 57, 52, 45, 40],
-#     'Am':  [64, 60, 57, 52, 45, 40],
-#     'A7':  [64, 61, 55, 52, 45, 40],
-#     'B':   [66, 63, 59, 54, 45, 40],
-#     'Bm':  [66, 62, 59, 54, 45, 40],
-#     'B7':  [66, 59, 57, 51, 47, 40],
-#     'C':   [64, 60, 55, 52, 48, 40],
-#     'Cm':  [64, 60, 55, 52, 48, 40],
-#     'C7':  [64, 60, 58, 52, 48, 40],
-#     'D':   [66, 62, 57, 50, 45, 40],
-#     'Dm':  [65, 62, 57, 50, 45, 40],
-#     'D7':  [66, 60, 57, 50, 45, 40],
-#     'E':   [64, 59, 56, 52, 47, 40],
-#     'Em':  [64, 59, 55, 52, 47, 40],
-#     'E7':  [64, 59, 56, 50, 47, 40],
-#     'F':   [65, 60, 57, 53, 45, 40],
-#     'Fm':  [65, 60, 56, 53, 45, 40],
-#     'F7':  [65, 60, 57, 51, 45, 40],
-#     'G':   [67, 59, 55, 50, 47, 43],
-#     'Gm':  [67, 62, 58, 50, 45, 40],
-#     'G7':  [65, 59, 55, 50, 47, 43],
-#     'D6/9': [64, 59, 55, 50, 47, 42],
-#     'G/B':  [64, 59, 55, 50, 47, 42],
-#     'Am7':  [64, 59, 55, 50, 47, 42],
-#     'D7/F#': [64, 59, 55, 50, 47, 42],
-#     'D5':    [66, 62, 57, 50, 45, 40],
-#     'Dsus2': [66, 64, 57, 50, 45, 40],
-# }
-
-CHORD_MIDI_NOTES_FULL = {
-    'A':   [64, 61, 57, 52, 45, None],
-    'Am':  [64, 60, 57, 52, 45, None],
-    'A7':  [64, 61, 55, 52, 45, None],
-    'B':   [66, 63, 59, 54, None, None],
-    'Bm':  [66, 62, 59, 54, None, None],
-    'B7':  [66, 59, 57, 51, 47, None],
-    'C':   [64, 60, 55, 52, 48, None],
-    'Cm':  [64, 60, 55, 52, 48, None],
-    'C7':  [64, 60, 58, 52, 48, None],
-    'D':   [66, 62, 57, 50, None, None],
-    'Dm':  [65, 62, 57, 50, None, None],
-    'D7':  [66, 60, 57, 50, None, None],
-    'E':   [64, 59, 56, 52, 47, None],
-    'Em':  [64, 59, 55, 52, 47, None],
-    'E7':  [64, 59, 56, 50, 47, None],
-    'F':   [65, 60, 57, 53, 48, None],
-    'Fm':  [65, 60, 56, 53, 48, None],
-    'F7':  [65, 60, 57, 51, 48, None],
-    'G':   [67, 59, 55, 50, 47, 43],
-    'Gm':  [67, 62, 58, 50, None, None],
-    'G7':  [65, 59, 55, 50, 47, 43],
-    'D6/9': [64, 59, 55, 52, 47, 40],
-    'D5':   [66, 62, 57, 50, None, None],
-    'Dsus2': [66, 64, 57, 50, None, None],
+# Guitar Chord Shapes
+# Format: chord_name -> [fret for string 0, fret for string 1, ..., fret for string 5]
+# fret = -1 means muted/not played, 0 means open string
+CHORD_SHAPES = {
+    "A": [0, 2, 2, 2, 0, 0],
+    "A7": [0, 2, 0, 2, 0, 0],
+    "Am": [0, 1, 2, 2, 0, 0],
+    "Am7": [0, 1, 0, 2, 0, 0],
+    "B": [1, 3, 3, 3, 0, 0],
+    "B7": [2, 0, 2, 1, 1, 2],
+    "Bm": [2, 3, 4, 4, 2, 2],
+    "C": [0, 1, 0, 2, 3, 0],
+    "C7": [0, 1, 3, 2, 3, 0],
+    "C Major": [-1, 3, 2, 0, 1, 0],
+    "D": [-1, -1, 0, 2, 2, 2],
+    "D5": [2, 3, 2, 0, 0, 0],
+    "D6/9": [0, 0, 0, 0, 2, 2],
+    "D7": [2, 1, 2, 0, 2, 2],
+    "D7/F#": [2, 1, 2, 0, 0, 2],
+    "Dm": [-1, -1, 0, 2, 3, 1],
+    "Dsus2": [2, 3, 2, 0, 0, 0],
+    "E": [0, 0, 1, 2, 2, 0],
+    "E7": [0, 3, 1, 2, 2, 0],
+    "Em": [0, 0, 0, 2, 2, 0],
+    "F": [1, 1, 2, 3, 3, 1],
+    "F7": [1, 1, 2, 1, 3, 1],
+    "Fm": [1, 1, 1, 3, 3, 1],
+    "G": [3, 2, 0, 0, 0, 3],
+    "G7": [1, 0, 0, 0, 2, 3],
+    "G Major": [3, 2, 0, 0, 0, 3],
+    "Gm": [3, 3, 3, 5, 5, 3],
+    "G/B": [3, 0, 0, 0, 2, 2],
+    "Ab": [-1, 0, 2, 2, 2, 0],
+    "Db": [-1, -1, 0, 2, 3, 2],
+    "Dbsus4": [-1, -1, 0, 2, 3, 3],
+    "Db/F": [2, 0, 0, 2, 3, -1],
+    "Eb": [0, 2, 2, 1, 0, 0],
+    "Gb": [3, 2, 0, 0, 3, 3]
 }
+
+# Standard tuning: String 0 (high E) = MIDI 64, String 5 (low E) = MIDI 40
+# Reversed so index 0 is the thinnest/highest string (more intuitive)
+OPEN_STRING_NOTES = [64, 59, 55, 50, 45, 40]  # Strings 0-5 (high to low)
+
+# Generate CHORD_MIDI_NOTES_FULL from CHORD_SHAPES
+CHORD_MIDI_NOTES_FULL = {}
+for chord_name, frets in CHORD_SHAPES.items():
+    midi_notes = []
+    for string_idx, fret in enumerate(frets):
+        if fret == -1:
+            # Muted string
+            midi_notes.append(None)
+        elif fret == 0:
+            # Open string
+            midi_notes.append(OPEN_STRING_NOTES[string_idx])
+        else:
+            # Fretted string
+            midi_notes.append(OPEN_STRING_NOTES[string_idx] + fret)
+    CHORD_MIDI_NOTES_FULL[chord_name] = midi_notes
 
 # Menu selection notes (22nd fret)
 SELECTION_NOTES = [86, 81, 77, 72, 67, 62]

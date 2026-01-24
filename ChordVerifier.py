@@ -16,7 +16,9 @@ class ChordVerifier:
     
     
     def __init__(self):
-        pass
+        self.target_frets = None
+        self.target_strings = None
+        self.guitar_state = None
     
     def _get_target_frets(self, chord_name: str) -> List[int]:
         """Get the target fret positions for a chord"""
@@ -34,57 +36,51 @@ class ChordVerifier:
         Verify if struck strings match the target chord
         
         Args:
-            allow_muted_strings: If True, muted strings (fret 0) can be absent
+            target_frets: List of fret positions for each string
+            target_strings: List of string indices that should be struck
+            guitar_state: Current guitar state
             
         Returns:
             True if chord matches, False otherwise
         """
-        if target_frets:
+        # Store for use by get_accuracy() and get_errors()
+        self.target_frets = target_frets
+        self.target_strings = target_strings
+        self.guitar_state = guitar_state
+        
+        if not target_frets:
             return False
         
-        missed_frets = False
-        missed_strings = False
         # Check each string
+        strings_matched = True
+        frets_matched = True
+
         for string_idx in range(6):
-            pressed_fret = self.guitar_state.get_fret_pressed(string_idx)
-            string_struck = guitar_state.is_string_struck(string_idx)
-            
-            # Muted string (fret 0) - should not be struck
-            if target_frets[string_idx] != pressed_fret:
-                return False
-            if target_strings[string_idx] != string_struck:     
-                return False
-        
-        return True
-    
-    def get_accuracy(self) -> float:
-        """
-        Calculate accuracy as percentage (0.0 to 1.0)
-        
-        Returns:
-            Percentage of correct strings (0.0 to 1.0)
-        """
-        if not self.target_frets:
-            return 0.0
-        
-        correct_count = 0
-        
-        for string_idx in range(6):
-            target_fret = self.target_frets[string_idx]
-            pressed_frets = self.guitar_state.get_pressed_frets_on_string(string_idx)
-            struck = self.guitar_state.is_string_struck(string_idx)
-            
-            if target_fret == 0:
-                if not struck:
-                    correct_count += 1
-            elif target_fret == -1:
-                if struck and len(pressed_frets) == 0:
-                    correct_count += 1
+            pressed_fret = guitar_state.get_fret_pressed(5-string_idx)
+            string_struck = guitar_state.is_string_struck(5-string_idx)
+
+            # Muted string (fret -1) - should not be struck
+            if target_frets[string_idx] == -1:
+                if string_struck:
+                    strings_matched = False
+            # Open string (fret 0) - should be struck if in target_strings
+            elif target_frets[string_idx] == 0:
+                if string_idx in target_strings and not string_struck:
+                    strings_matched = False
+                if string_idx not in target_strings and string_struck:
+                    strings_matched = False
+            # Fretted string - must match target fret
             else:
-                if struck and target_fret in pressed_frets:
-                    correct_count += 1
+                if pressed_fret != target_frets[string_idx]:
+                    print(f"String {string_idx} fret mismatch: expected {target_frets[string_idx]}, got {pressed_fret}")
+                    frets_matched = False
+                if string_idx in target_strings and not string_struck:
+                    strings_matched = False
         
-        return correct_count / 6
+        # print(f"Chord Verification - Frets Matched: {frets_matched}, Strings Matched: {strings_matched}")   
+        return (frets_matched, strings_matched)
+    
+   
     
     def get_errors(self) -> Dict[int, str]:
         """
@@ -99,22 +95,20 @@ class ChordVerifier:
             return errors
         
         for string_idx in range(6):
-            target_fret = self.target_frets[string_idx]
-            pressed_frets = self.guitar_state.get_pressed_frets_on_string(string_idx)
-            struck = self.guitar_state.is_string_struck(string_idx)
-            
+            t_index = string_idx
+            target_fret = self.target_frets[5 - t_index]
+            pressed_fret = self.guitar_state.get_fret_pressed(t_index)
+            struck = self.guitar_state.is_string_struck(5-t_index)
             if target_fret == 0:
-                if struck:
-                    errors[string_idx] = f"String {string_idx} should be muted"
-            elif target_fret == -1:
                 if not struck:
-                    errors[string_idx] = f"String {string_idx} should be open (struck)"
-                elif len(pressed_frets) > 0:
-                    errors[string_idx] = f"String {string_idx} should be open but frets pressed: {pressed_frets}"
+                    errors[t_index] = f"String {t_index} should be struck open"
+            elif target_fret == -1:
+                if struck:
+                    errors[t_index] = f"String {t_index} should not be struck"
             else:
                 if not struck:
-                    errors[string_idx] = f"String {string_idx} should be struck"
-                elif target_fret not in pressed_frets:
-                    errors[string_idx] = f"String {string_idx} should be on fret {target_fret}, got {pressed_frets}"
-        
+                    errors[t_index] = f"String {t_index} should be struck"
+                elif pressed_fret != target_fret:
+                    errors[t_index] = f"String {t_index} should be on fret {target_fret}, got {pressed_fret}"
+
         return errors

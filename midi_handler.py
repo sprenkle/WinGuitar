@@ -134,7 +134,7 @@ class MIDIHandler(QObject):
                                 
                                 if command == 0x90:  # Note On
                                     if velocity > 0:
-                                        self.midi_note_received.emit(string, fret)
+                                        self.midi_note_received.emit(5-string, fret)
                                     else:
                                         # Note on with velocity 0 = note off
                                         self.midi_note_released.emit(string)
