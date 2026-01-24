@@ -4,6 +4,7 @@ Requires: pip install bleak
 """
 
 import asyncio
+import argparse
 from bleak import BleakClient, BleakScanner
 
 # Aeroband UUIDs (standard MIDI service)
@@ -40,15 +41,26 @@ class MIDIDebugger:
         """Get friendly note name from MIDI note number"""
         return self.note_names.get(midi_note, f'Unknown({midi_note})')
 
-    async def scan_and_connect(self):
-        """Scan for and connect to Aeroband guitar"""
+    async def scan_and_connect(self, target_address=None):
+        """Scan for and connect to Aeroband guitar
+
+        If `target_address` is provided, select device by address. Otherwise
+        fall back to name-based matching (aeroband/pocketdrum).
+        """
         print("Scanning for Aeroband device...")
-        
+
         devices = await BleakScanner.discover()
         aeroband_device = None
-        
+
         for device in devices:
             print(f"Found: {device.name} ({device.address})")
+            # Match by explicit address first (if provided)
+            if target_address and device.address and device.address.lower() == target_address.lower():
+                aeroband_device = device
+                print(f"  -> Selected by address: {device.name or device.address}")
+                break
+
+            # Fall back to name-based detection
             if device.name and ("aeroband" in device.name.lower() or "pocketdrum" in device.name.lower()):
                 aeroband_device = device
                 print(f"  -> Selected: {device.name}")
@@ -193,11 +205,14 @@ class MIDIDebugger:
         print(f"[PARSED] Total {len(messages)} messages\n")
         return messages
 
-    async def run(self):
-        """Main debug loop"""
+    async def run(self, target_address=None):
+        """Main debug loop
+
+        `target_address` optionally forces selection by Bluetooth address.
+        """
         print("=== WINDOWS AEROBAND MIDI DEBUG ===\n")
         
-        if not await self.scan_and_connect():
+        if not await self.scan_and_connect(target_address):
             return
         
         print("\nListening for MIDI messages...")
@@ -239,9 +254,9 @@ class MIDIDebugger:
             print("Disconnected")
 
 
-async def main():
+async def main(address=None):
     debugger = MIDIDebugger()
-    await debugger.run()
+    await debugger.run(address)
 
 
 if __name__ == '__main__':
@@ -250,8 +265,11 @@ if __name__ == '__main__':
     print("\nInstall dependencies with:")
     print("  pip install bleak")
     print("\nMake sure Bluetooth is enabled on your PC.\n")
-    
+    parser = argparse.ArgumentParser(description='Windows Aeroband MIDI Debugger')
+    parser.add_argument('-a', '--address', help='Bluetooth address of Aeroband (e.g. DB:48:C3:06:41:2B)')
+    args = parser.parse_args()
+
     try:
-        asyncio.run(main())
+        asyncio.run(main(args.address))
     except KeyboardInterrupt:
         print("\nExiting...")

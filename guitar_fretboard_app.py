@@ -10,7 +10,7 @@ import threading
 import asyncio
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                                 QHBoxLayout, QLabel, QComboBox, QPushButton, QTabWidget)
-from PySide6.QtCore import Qt, QTimer, Signal, QObject, QSize, QCoreApplication
+from PySide6.QtCore import Qt, QTimer, Signal, QObject, QSize, QCoreApplication, QThread, QMetaObject, Slot
 from PySide6.QtGui import QPainter, QColor, QFont, QPen, QBrush
 from PySide6.QtWidgets import QFrame
 
@@ -28,6 +28,10 @@ except ImportError:
 
 
 class GuitarFretboardApp(QMainWindow):
+    # Signals for thread-safe communication from worker thread
+    status_changed = Signal(str)  # Emits status text
+    style_changed = Signal(str)   # Emits stylesheet
+    
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Guitar Fretboard - Aeroband")
@@ -57,6 +61,7 @@ class GuitarFretboardApp(QMainWindow):
         # Device info
         self.ble_devices = {}
         self.aeroband_address = None
+        self.aeroband_name = None
         
         # Create UI
         central_widget = QWidget()
@@ -90,8 +95,12 @@ class GuitarFretboardApp(QMainWindow):
         # Trigger initial chord display after fretboard is created
         self.on_chord_changed('E Major')
         
-        # MIDI thread
+        # MIDI thread (use QThread to host the QObject)
         self.midi_thread = None
+        
+        # Connect signals to slots for thread-safe UI updates
+        self.status_changed.connect(self.status_label.setText)
+        self.style_changed.connect(self.status_label.setStyleSheet)
         
         # Auto-connect to Aeroband on startup
         QTimer.singleShot(500, self.auto_connect_aeroband)
@@ -113,6 +122,36 @@ class GuitarFretboardApp(QMainWindow):
                 f.write(msg + '\n')
         except:
             pass
+    
+    @Slot()
+    def _start_midi_thread(self):
+        """Start MIDI listening thread (must be called from main thread)"""
+        if self.midi_handler.running:
+            # If an existing thread exists, stop it first
+            try:
+                if self.midi_thread and isinstance(self.midi_thread, QThread):
+                    self.midi_handler.stop()
+                    self.midi_thread.quit()
+                    self.midi_thread.wait(2000)
+            except Exception:
+                pass
+
+            self.midi_thread = QThread()
+            # Move the QObject to the QThread so its timers/signals are associated with a QThread
+            self.midi_handler.moveToThread(self.midi_thread)
+            # When thread starts, call the blocking listen() method (will run in this thread)
+            self.midi_thread.started.connect(self.midi_handler.listen)
+            self.midi_thread.start()
+
+            # Emit signals (we're on main thread now)
+            self.status_changed.emit(f"Connected: {self.aeroband_name}")
+            self.style_changed.emit("color: green; font-weight: bold;")
+            self._log("Successfully connected!")
+        else:
+            # MIDI handler failed to start
+            self.status_changed.emit("Failed to connect")
+            self.style_changed.emit("color: red; font-weight: bold;")
+            self._log("Failed to start listening")
     
     def auto_connect_aeroband(self):
         """Automatically scan for and connect to Aeroband"""
@@ -142,32 +181,35 @@ class GuitarFretboardApp(QMainWindow):
                     break
             
             if not aeroband:
-                self.status_label.setText("Aeroband not found - retrying...")
+                # Emit signal from worker thread (thread-safe)
+                self.status_changed.emit("Aeroband not found - retrying...")
                 self._log("No Aeroband found, will retry in 5 seconds")
-                QTimer.singleShot(5000, self.auto_connect_aeroband)
+                # Schedule retry on the main thread
+                QMetaObject.invokeMethod(self, "auto_connect_aeroband", Qt.ConnectionType.QueuedConnection)
                 return
             
             self.aeroband_address = aeroband.address
+            self.aeroband_name = aeroband.name  # Store for later use in _start_midi_thread
             self._log(f"Connecting to {aeroband.name} at {aeroband.address}")
-            self.status_label.setText(f"Connecting to {aeroband.name}...")
+            # Emit signal from worker thread (thread-safe)
+            self.status_changed.emit(f"Connecting to {aeroband.name}...")
             
-            # Start listening
+            # Start listening (call _start_midi_thread on main thread to set up QThread)
             if self.midi_handler.start_listening_ble(aeroband.address):
-                self.midi_thread = threading.Thread(target=self.midi_handler.listen, daemon=True)
-                self.midi_thread.start()
-                self.status_label.setText(f"Connected: {aeroband.name}")
-                self.status_label.setStyleSheet("color: green; font-weight: bold;")
-                self._log("Successfully connected!")
+                # Schedule MIDI thread setup on the main thread (required for moveToThread)
+                QMetaObject.invokeMethod(self, "_start_midi_thread", Qt.ConnectionType.QueuedConnection)
             else:
-                self.status_label.setText("Failed to connect")
-                self.status_label.setStyleSheet("color: red; font-weight: bold;")
+                # Emit signals from worker thread (thread-safe)
+                self.status_changed.emit("Failed to connect")
+                self.style_changed.emit("color: red; font-weight: bold;")
                 self._log("Failed to start listening")
                 
         except Exception as e:
             self._log(f"Error: {e}")
-            self.status_label.setText(f"Error: {str(e)[:30]}")
-            self.status_label.setStyleSheet("color: red; font-weight: bold;")
-            QTimer.singleShot(5000, self.auto_connect_aeroband)
+            # Emit signals from worker thread (thread-safe)
+            self.status_changed.emit(f"Error: {str(e)[:30]}")
+            self.style_changed.emit("color: red; font-weight: bold;")
+            QMetaObject.invokeMethod(self, "auto_connect_aeroband", Qt.ConnectionType.QueuedConnection)
     
     def on_chord_changed(self, chord_name):
         """Handle chord selection change"""
@@ -246,7 +288,16 @@ class GuitarFretboardApp(QMainWindow):
         if self.midi_handler.running:
             self.midi_handler.stop()
             if self.midi_thread:
-                self.midi_thread.join(timeout=2)
+                try:
+                    # If using QThread, quit and wait
+                    if isinstance(self.midi_thread, QThread):
+                        self.midi_thread.quit()
+                        self.midi_thread.wait(2000)
+                    else:
+                        # Fallback: if a plain thread was used
+                        self.midi_thread.join(timeout=2)
+                except Exception:
+                    pass
         event.accept()
     
     def on_device_type_changed(self, device_type):
