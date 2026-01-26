@@ -9,7 +9,7 @@ import sys
 import threading
 import asyncio
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                                QHBoxLayout, QLabel, QComboBox, QPushButton, QTabWidget)
+                                QHBoxLayout, QLabel, QComboBox, QPushButton, QTabWidget, QCheckBox)
 from PySide6.QtCore import Qt, QTimer, Signal, QObject, QSize, QCoreApplication, QThread, QMetaObject, Slot
 from PySide6.QtGui import QPainter, QColor, QFont, QPen, QBrush
 from PySide6.QtWidgets import QFrame
@@ -99,6 +99,29 @@ class GuitarFretboardApp(QMainWindow):
         self.chord_combo.currentTextChanged.connect(self.on_chord_changed)
         control_layout.addWidget(self.chord_combo)
         
+        # Feedback checkbox
+        self.feedback_checkbox = QCheckBox("Show Feedback")
+        self.feedback_checkbox.setChecked(True)
+        control_layout.addWidget(self.feedback_checkbox)
+        
+        # Show target checkbox
+        self.show_target_checkbox = QCheckBox("Show Target")
+        self.show_target_checkbox.setChecked(True)
+        self.show_target_checkbox.stateChanged.connect(self.on_show_target_changed)
+        control_layout.addWidget(self.show_target_checkbox)
+        
+        # Show next chord checkbox
+        self.show_next_chord_checkbox = QCheckBox("Show Next Chord")
+        self.show_next_chord_checkbox.setChecked(True)
+        self.show_next_chord_checkbox.stateChanged.connect(self.on_show_next_chord_changed)
+        control_layout.addWidget(self.show_next_chord_checkbox)
+        
+        # Show chord name checkbox
+        self.show_chord_name_checkbox = QCheckBox("Show Chord Name")
+        self.show_chord_name_checkbox.setChecked(True)
+        self.show_chord_name_checkbox.stateChanged.connect(self.on_show_chord_name_changed)
+        control_layout.addWidget(self.show_chord_name_checkbox)
+        
         control_layout.addStretch()
         
         # Status label
@@ -134,6 +157,11 @@ class GuitarFretboardApp(QMainWindow):
         self.chord_timer.timeout.connect(self.finished_chord)
         self.chord_timeout_ms = 250  # 250ms timeout
         self.verifier = ChordVerifier()
+        
+        # Feedback state
+        self.feedback_text = ""  # "CORRECT" or "INCORRECT"
+        self.feedback_color = "green"  # "green" or "red"
+        self.should_advance_chord = False  # Flag to advance to next chord after feedback
 
 
     
@@ -242,6 +270,21 @@ class GuitarFretboardApp(QMainWindow):
         else:
             self.fretboard.set_chord(chord_name)
     
+    def on_show_target_changed(self):
+        """Handle show target checkbox change"""
+        show_target = self.show_target_checkbox.isChecked()
+        self.fretboard.set_show_target(show_target)
+    
+    def on_show_next_chord_changed(self):
+        """Handle show next chord checkbox change"""
+        show_next_chord = self.show_next_chord_checkbox.isChecked()
+        self.fretboard.set_show_next_chord(show_next_chord)
+    
+    def on_show_chord_name_changed(self):
+        """Handle show chord name checkbox change"""
+        show_chord_name = self.show_chord_name_checkbox.isChecked()
+        self.fretboard.set_show_chord_name(show_chord_name)
+    
     def on_practice_changed(self, practice_name):
         """Handle practice selection change"""
         self._log(f"Practice changed to: {practice_name}")
@@ -286,11 +329,25 @@ class GuitarFretboardApp(QMainWindow):
         """Handle fret released event"""
         print(f"Fret Released: String {string}, Fret {fret}")
         self.guitar_state.release_fret(string, fret)
+        # Clear feedback when all frets are released
+        if all(f == 0 for f in self.guitar_state.pressed_frets):
+            # If we should advance to next chord, do it now
+            if self.should_advance_chord:
+                self.should_advance_chord = False
+                self.current_practice_idx += 1
+                self._load_next_practice_chord()
+            self.feedback_text = ""
+            self.feedback_color = "green"
         self._state_changed()
 
     def _state_changed(self):
         """Update fretboard display based on guitar state"""
         self.fretboard.set_guitar_state(self.guitar_state)
+        # Pass feedback to fretboard if checkbox is enabled
+        if self.feedback_checkbox.isChecked():
+            self.fretboard.set_feedback(self.feedback_text, self.feedback_color)
+        else:
+            self.fretboard.set_feedback("", "green")
         self.fretboard.show()
     
     def _load_next_practice_chord(self):
@@ -306,6 +363,15 @@ class GuitarFretboardApp(QMainWindow):
             self.fretboard.chord_name = target_chord.name
             self.fretboard.chord_frets = {0: target_chord.frets}
             self.fretboard.strings_to_strike = target_chord.strings_to_strike
+            
+            # Set the next chord (if there is one) to display in yellow
+            if self.current_practice_idx + 1 < len(self.practice_chords):
+                next_chord = self.practice_chords[self.current_practice_idx + 1]
+                self.fretboard.set_next_chord(next_chord.name, next_chord.frets)
+            else:
+                # No next chord - clear it
+                self.fretboard.set_next_chord(None, [])
+            
             self.fretboard.update()
             
             self.chord_combo.blockSignals(True)
@@ -337,14 +403,22 @@ class GuitarFretboardApp(QMainWindow):
             strings_matched, frets_matched = self.verifier.verify(target_frets, target_strings, self.guitar_state)
             if frets_matched and strings_matched:
                 print(f"✓ CORRECT: {current_chord_name} played perfectly!")
-                # Move to next chord
-                self.current_practice_idx += 1
-                QTimer.singleShot(500, self._load_next_practice_chord)
+                self.feedback_text = "CORRECT"
+                self.feedback_color = "green"
+                # If feedback is not enabled, advance immediately
+                # Otherwise, set flag to advance after frets are released
+                if self.feedback_checkbox.isChecked():
+                    self.should_advance_chord = True
+                else:
+                    self.current_practice_idx += 1
+                    QTimer.singleShot(500, self._load_next_practice_chord)
             else:
                 errors = self.verifier.get_errors()
                 print(f"✗ INCORRECT: {current_chord_name}")
                 for string_idx, error in errors.items():
                     print(f"  {error}")
+                self.feedback_text = "INCORRECT"
+                self.feedback_color = "red"
 
         self.guitar_state.clear_strings()
         self._state_changed()

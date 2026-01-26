@@ -5,7 +5,7 @@
     "standard_tuning": [64, 59, 55, 50, 45, 40],
     "tuning": ["E4", "B3", "G3", "D3", "A2", "E2"],
     "image" : {
-        "image_path": "images/fenderstrat.jpg",
+        "image_path": "images/aeroband.jpg",
         "vertical_positions": [65, 79, 89, 101, 114, 125],
         "horizontal_positions": [343, 396, 446, 492, 535, 579, 616, 653, 688, 721, 752, 781, 808, 834, 858, 881, 903, 924, 944, 962, 980, 995]
 

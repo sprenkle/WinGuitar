@@ -14,11 +14,13 @@ class FretboardWidget(QFrame):
     
     def __init__(self):
         super().__init__()
-        self.setMinimumSize(QSize(600, 400))
+        self.setMinimumSize(QSize(1600, 600))
         self.pressed_notes = set()  # MIDI notes currently pressed
         self.chord_name = None
         self.chord_frets = {}  # Fret positions for the selected chord
         self.strings_to_strike = []  # Indices of strings that should be struck (0-5)
+        self.next_chord_frets = {}  # Fret positions for the next chord in queue
+        self.next_chord_name = None  # Name of the next chord
 
         self.guitar_state = GuitarState()
 
@@ -34,9 +36,23 @@ class FretboardWidget(QFrame):
         
         # Load JSON configuration (which will also load the image)
         self.config = None
-        self.vertical_positions = []
+        self.verticalA_positions = []
+        self.verticalB_positions = []
         self.horizontal_positions = []
         self.load_config()
+        
+        # Feedback display
+        self.feedback_text = ""  # "CORRECT" or "INCORRECT"
+        self.feedback_color = "green"  # "green" or "red"
+        
+        # Show target display
+        self.show_target = True  # Whether to display target chord frets
+        
+        # Show next chord display
+        self.show_next_chord = True  # Whether to display next chord in queue
+        
+        # Show chord name display
+        self.show_chord_name = True  # Whether to display the current chord name
         
         # Setup timer for periodic repaint (thread-safe)
         self.update_timer = QTimer()
@@ -50,7 +66,7 @@ class FretboardWidget(QFrame):
         try:
             # Get the directory where this script is located
             script_dir = os.path.dirname(os.path.abspath(__file__))
-            config_path = os.path.join(script_dir, 'fenderstrat.json')
+            config_path = os.path.join(script_dir, 'aeroband.json')
             
             with open(config_path, 'r') as f:
                 self.config = json.load(f)
@@ -66,11 +82,12 @@ class FretboardWidget(QFrame):
                 
             # Extract fret and string positions from JSON
             image_config = self.config.get('image', {})
-            self.vertical_positions = image_config.get('vertical_positions', [])
+            self.verticalA_positions = image_config.get('verticalA_positions', [])
+            self.verticalB_positions = image_config.get('verticalB_positions', [])
             self.horizontal_positions = image_config.get('horizontal_positions', [])
             
             # Load image using path from JSON
-            image_path = image_config.get('image_path', 'fenderstrat.jpg')
+            image_path = image_config.get('image_path', 'aeroband.jpg')
             
             # Resolve image path relative to script directory
             if not os.path.isabs(image_path):
@@ -102,7 +119,6 @@ class FretboardWidget(QFrame):
                 print(f"Loaded image from: {abs_path}")
                 self.has_image = True
             
-            print(f"Loaded config: {len(self.vertical_positions)} vertical positions, {len(self.horizontal_positions)} horizontal positions")
             print(f"Loaded {len(self.CHORD_PRESETS)} chord presets from config")
             
         except FileNotFoundError as e:
@@ -134,6 +150,33 @@ class FretboardWidget(QFrame):
             self.guitar_state.clear_all()
         self.update()
     
+    def set_feedback(self, text, color):
+        """Set feedback text and color to display (CORRECT or INCORRECT)"""
+        self.feedback_text = text
+        self.feedback_color = color
+        self.update()
+    
+    def set_show_target(self, show):
+        """Set whether to show target chord frets and strings to strike"""
+        self.show_target = show
+        self.update()
+    
+    def set_next_chord(self, chord_name, frets):
+        """Set the next chord in the practice queue to display in yellow"""
+        self.next_chord_name = chord_name
+        self.next_chord_frets = {0: frets} if frets else {}
+        self.update()
+    
+    def set_show_next_chord(self, show):
+        """Set whether to show the next chord in the practice queue"""
+        self.show_next_chord = show
+        self.update()
+    
+    def set_show_chord_name(self, show):
+        """Set whether to show the current chord name"""
+        self.show_chord_name = show
+        self.update()
+    
     def get_fret_for_note(self, midi_note):
         """Convert MIDI note to (string, fret) position"""
         for string_idx, open_note in enumerate(self.STANDARD_TUNING):
@@ -153,9 +196,13 @@ class FretboardWidget(QFrame):
         # Draw background
         painter.fillRect(0, 0, width, height, QColor(240, 240, 240))
         
-        # Draw title
+        # Draw title and chord name (centered)
         painter.setFont(QFont('Arial', 16, QFont.Bold))
-        painter.drawText(10, 25, f"Guitar Fretboard{' - ' + self.chord_name if self.chord_name else ''}")
+        if (self.show_chord_name or self.feedback_text) and self.chord_name:
+            title_text = f"Guitar Fretboard - {self.chord_name}"
+        else:
+            title_text = "Guitar Fretboard"
+        painter.drawText(0, 10, width, 40, Qt.AlignCenter, title_text)
         
         try:
             # Scale image to fit window (minimal margins - double the size)
@@ -182,8 +229,8 @@ class FretboardWidget(QFrame):
             scale_x = img_width / self.guitar_image.width() if self.guitar_image.width() > 0 else 1
             scale_y = img_height / self.guitar_image.height() if self.guitar_image.height() > 0 else 1
             
-            # Draw chord dots (practice target) - light blue with transparency
-            if self.chord_frets:
+            # Draw chord dots (practice target) - light blue with transparency (only if show_target is True)
+            if self.chord_frets and (self.show_target or self.feedback_text):
                 painter.setBrush(QBrush(QColor(100, 150, 255, 180)))
                 painter.setPen(QPen(QColor(50, 100, 200), 2))
                 
@@ -192,16 +239,34 @@ class FretboardWidget(QFrame):
                     try:
                         # Iterate through each string (0-5) and get its fret position
                         for string_idx, fret in enumerate(frets_array):
-                            if fret > 0 and string_idx < len(self.horizontal_positions) and fret < len(self.vertical_positions):
+                            if fret > 0 and string_idx < len(self.horizontal_positions) and fret < len(self.verticalA_positions) - 1:
                                 # Get position from JSON
                                 # vertical_positions[fret] gives Y, horizontal_positions[string_idx] gives X
-                                y = img_y + self.vertical_positions[5 - string_idx] * scale_y
-                                x = img_x + (self.horizontal_positions[fret - 1] - 5) * scale_x
+                                y = img_y + self.verticalA_positions[5 - string_idx] * scale_y
+                                x = img_x + (self.horizontal_positions[fret] - 5) * scale_x
                                 dot_size = 9 # Fixed size for chord dots
                                 painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
                     except (IndexError, TypeError):
                         pass
             
+            # Draw next chord dots (yellow) - shows the upcoming chord in the practice queue
+            if self.next_chord_frets and self.show_next_chord:
+                painter.setBrush(QBrush(QColor(255, 255, 0, 150)))  # Yellow with transparency
+                painter.setPen(QPen(QColor(200, 200, 0), 2))
+                
+                # next_chord_frets is {0: [fret0, fret1, fret2, fret3, fret4, fret5]}
+                for root_pos, frets_array in self.next_chord_frets.items():
+                    try:
+                        # Iterate through each string (0-5) and get its fret position
+                        for string_idx, fret in enumerate(frets_array):
+                            if fret > 0 and string_idx < len(self.horizontal_positions) and fret < len(self.verticalA_positions) - 1:
+                                # Get position from JSON
+                                y = img_y + self.verticalA_positions[5 - string_idx] * scale_y
+                                x = img_x + (self.horizontal_positions[fret] - 5) * scale_x
+                                dot_size = 5  # Slightly smaller than current chord dots
+                                painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
+                    except (IndexError, TypeError):
+                        pass
           
 
 
@@ -210,8 +275,8 @@ class FretboardWidget(QFrame):
             for string_idx in range(self.NUM_STRINGS):
                 fret = self.guitar_state.get_fret_pressed(string_idx)
                 if fret > 0:
-                    y = img_y + self.vertical_positions[string_idx] * scale_y
-                    x = img_x + (self.horizontal_positions[fret-1] - 5)* scale_x
+                    y = img_y + self.verticalA_positions[string_idx] * scale_y
+                    x = img_x + (self.horizontal_positions[fret] - 5)* scale_x
                     dot_size = 8
                     
                     # Check if this fret matches the target chord
@@ -228,22 +293,33 @@ class FretboardWidget(QFrame):
                         painter.setBrush(QBrush(QColor(255, 0, 0, 200)))  # Red for wrong
                     
                     painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
+                    
+                    # Check if this pressed note matches any note in the next chord (only if show_next_chord is enabled)
+                    if self.next_chord_frets and self.show_next_chord:
+                        expected_next_fret = self.next_chord_frets.get(0, [])[5-string_idx] if 0 in self.next_chord_frets else -1
+                        if fret == expected_next_fret and expected_next_fret > 0:
+                            # Draw a smaller yellow circle to show it matches the next chord
+                            painter.setBrush(QBrush(QColor(255, 255, 100, 220)))  # Bright yellow
+                            painter.setPen(QPen(QColor(200, 200, 0), 1))
+                            small_dot_size = 4
+                            painter.drawEllipse(int(x - small_dot_size), int(y - small_dot_size), small_dot_size * 2, small_dot_size * 2)
 
             # Draw struck strings (active strings) - green
             painter.setBrush(QBrush(QColor(0, 200, 0, 180)))
             painter.setPen(QPen(QColor(0, 150, 0), 6))
             for string_idx in range(self.NUM_STRINGS):
                 if self.guitar_state.is_string_struck(string_idx):
-                    y = img_y + self.vertical_positions[string_idx] * scale_y
-                    x0 = img_x + self.horizontal_positions[0] * scale_x - 100
+                    y1 = img_y + self.verticalA_positions[string_idx] * scale_y
+                    y2 = img_y + self.verticalB_positions[string_idx] * scale_y
+                    x0 = img_x + self.horizontal_positions[0] * scale_x 
                     x1 = img_x + self.horizontal_positions[-1] * scale_x
-                    painter.drawLine(int(x0), int(y-1), int(x1), int(y+1))
+                    painter.drawLine(int(x0), int(y1), int(x1), int(y2))
 
-            # Draw string strike indicators (marks on the left side of the fretboard)
-            if self.chord_frets:
+            # Draw string strike indicators (marks on the left side of the fretboard) (shown if show_target is True or feedback is displayed)
+            if self.chord_frets and (self.show_target or self.feedback_text):
                 for string_idx in range(self.NUM_STRINGS):
-                    y = img_y + self.vertical_positions[string_idx] * scale_y - 10
-                    x = img_x + (self.horizontal_positions[0] - 50) * scale_x
+                    y = img_y + (self.verticalA_positions[string_idx]  - 5) * scale_y 
+                    x = img_x + (self.horizontal_positions[0]) * scale_x
                     
                     if self.chord_frets.get(0, [])[5-string_idx] == 0:
                         # Draw a checkmark for strings that should be struck
@@ -256,6 +332,17 @@ class FretboardWidget(QFrame):
                         painter.setFont(QFont('Arial', 14, QFont.Bold))
                         painter.drawText(int(x), int(y), 40, 20, Qt.AlignCenter, '✕')
 
+            # Draw feedback (CORRECT/INCORRECT)
+            if self.feedback_text:
+                painter.setFont(QFont('Arial', 48, QFont.Bold))
+                # Set color based on feedback
+                if self.feedback_color == "green":
+                    color = QColor(0, 200, 0)  # Green for CORRECT
+                else:
+                    color = QColor(255, 0, 0)  # Red for INCORRECT
+                painter.setPen(color)
+                # Draw feedback text at the top of the widget
+                painter.drawText(0, 30, width, 80, Qt.AlignCenter, self.feedback_text)
                     
         except Exception as e:
             print(f"Error drawing guitar image: {e}")

@@ -1,0 +1,15 @@
+{
+    "guitar_model": "Aeroband Guitar",
+    "number_of_strings": 6,
+    "number_of_frets": 22,
+    "standard_tuning": [64, 59, 55, 50, 45, 40],
+    "tuning": ["E4", "B3", "G3", "D3", "A2", "E2"],
+    "image" : {
+        "image_path": "images/aeroband.jpg",
+        "verticalA_positions": [43, 56, 69, 82, 95, 108],
+        "verticalB_positions": [25, 44,  63, 81, 100, 119],
+        "horizontal_positions": [351, 417, 480, 540, 598, 652, 705, 752, 798, 884, 922, 958, 993, 1026, 1057, 1085, 1113, 1140, 1165, 1188, 1210,1231]  
+
+
+    }
+}
