@@ -242,7 +242,7 @@ class FretboardWidget(QFrame):
                             if fret > 0 and string_idx < len(self.horizontal_positions) and fret < len(self.verticalA_positions) - 1:
                                 # Get position from JSON
                                 # vertical_positions[fret] gives Y, horizontal_positions[string_idx] gives X
-                                y = img_y + self.verticalA_positions[5 - string_idx] * scale_y
+                                y = img_y + self.verticalA_positions[string_idx] * scale_y
                                 x = img_x + (self.horizontal_positions[fret] - 5) * scale_x
                                 dot_size = 9 # Fixed size for chord dots
                                 painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
@@ -261,7 +261,7 @@ class FretboardWidget(QFrame):
                         for string_idx, fret in enumerate(frets_array):
                             if fret > 0 and string_idx < len(self.horizontal_positions) and fret < len(self.verticalA_positions) - 1:
                                 # Get position from JSON
-                                y = img_y + self.verticalA_positions[5 - string_idx] * scale_y
+                                y = img_y + self.verticalA_positions[string_idx] * scale_y
                                 x = img_x + (self.horizontal_positions[fret] - 5) * scale_x
                                 dot_size = 5  # Slightly smaller than current chord dots
                                 painter.drawEllipse(int(x - dot_size), int(y - dot_size), dot_size * 2, dot_size * 2)
@@ -283,7 +283,7 @@ class FretboardWidget(QFrame):
                     is_correct = False
                     if self.chord_frets:
                         # Get the expected fret for this string from the chord
-                        expected_fret = self.chord_frets.get(0, [])[5-string_idx] if 0 in self.chord_frets else -1
+                        expected_fret = self.chord_frets.get(0, [])[string_idx] if 0 in self.chord_frets else -1
                         is_correct = (fret == expected_fret and expected_fret != -1)
                     
                     # Color green if correct chord fret, red if wrong
@@ -296,7 +296,7 @@ class FretboardWidget(QFrame):
                     
                     # Check if this pressed note matches any note in the next chord (only if show_next_chord is enabled)
                     if self.next_chord_frets and self.show_next_chord:
-                        expected_next_fret = self.next_chord_frets.get(0, [])[5-string_idx] if 0 in self.next_chord_frets else -1
+                        expected_next_fret = self.next_chord_frets.get(0, [])[string_idx] if 0 in self.next_chord_frets else -1
                         if fret == expected_next_fret and expected_next_fret > 0:
                             # Draw a smaller yellow circle to show it matches the next chord
                             painter.setBrush(QBrush(QColor(255, 255, 100, 220)))  # Bright yellow
@@ -321,12 +321,12 @@ class FretboardWidget(QFrame):
                     y = img_y + (self.verticalA_positions[string_idx]  - 5) * scale_y 
                     x = img_x + (self.horizontal_positions[0]) * scale_x
                     
-                    if self.chord_frets.get(0, [])[5-string_idx] == 0:
+                    if self.chord_frets.get(0, [])[string_idx] == 0:
                         # Draw a checkmark for strings that should be struck
                         painter.setPen(QPen(QColor(0, 150, 0), 3))  # Green
                         painter.setFont(QFont('Arial', 14, QFont.Bold))
                         painter.drawText(int(x), int(y), 40, 20, Qt.AlignCenter, 'O')
-                    elif self.chord_frets.get(0, [])[5-string_idx] == -1:
+                    elif self.chord_frets.get(0, [])[string_idx] == -1:
                         # Draw an X for strings that should NOT be struck (muted)
                         painter.setPen(QPen(QColor(200, 0, 0), 3))  # Red
                         painter.setFont(QFont('Arial', 14, QFont.Bold))
