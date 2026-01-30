@@ -49,7 +49,7 @@ class FretboardWidget(QFrame):
         self.show_target = True  # Whether to display target chord frets
         
         # Show next chord display
-        self.show_next_chord = True  # Whether to display next chord in queue
+        self.show_next_chord = False  # Whether to display next chord in queue
         
         # Show chord name display
         self.show_chord_name = True  # Whether to display the current chord name

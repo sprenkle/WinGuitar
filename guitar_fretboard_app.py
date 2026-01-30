@@ -112,7 +112,7 @@ class GuitarFretboardApp(QMainWindow):
         
         # Show next chord checkbox
         self.show_next_chord_checkbox = QCheckBox("Show Next Chord")
-        self.show_next_chord_checkbox.setChecked(True)
+        self.show_next_chord_checkbox.setChecked(False)
         self.show_next_chord_checkbox.stateChanged.connect(self.on_show_next_chord_changed)
         control_layout.addWidget(self.show_next_chord_checkbox)
         
