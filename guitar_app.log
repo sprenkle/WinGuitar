@@ -10805,3 +10805,102 @@ Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
 Successfully connected!
 Practice changed to: Blue 7
 Practice [1/7]: A7
+Chord changed to: E Major
+Practice changed to: Open D
+Practice [1/4]: Dm
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 17 devices
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: None (72:B2:15:81:09:F0)
+  Device: None (4B:68:5F:9A:86:BE)
+  Device: None (43:1D:7D:35:83:4B)
+  Device: None (55:03:C4:FC:0B:FA)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (75:3C:3D:65:76:24)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: None (4F:EE:41:C0:41:75)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Practice changed to: Blue 7
+Practice [1/7]: A7
+Practice [2/7]: B7
+Chord changed to: E Major
+Practice changed to: Open D
+Practice [1/4]: Dm
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 18 devices
+  Device: None (A8:51:AB:9C:17:68)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (4D:90:25:0A:D6:F0)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Practice changed to: Blue 7
+Practice [1/7]: A7
+Practice [2/7]: B7
+Chord changed to: E Major
+Practice changed to: Open D
+Practice [1/4]: Dm
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 19 devices
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (64:85:C6:FA:06:2A)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Chord changed to: E Major
+Practice changed to: Open D
+Practice [1/4]: Dm
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 21 devices
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: None (56:45:0C:59:25:EC)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: None (7A:AF:B8:44:DC:A6)
+  Device: None (63:69:F9:BE:F6:07)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (54:6A:9C:63:FD:D9)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: None (7D:76:A2:F6:48:3A)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: Spark GO BLE (F7:EB:ED:10:9E:BD)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Practice changed to: Blue 7
+Practice [1/7]: A7
+Chord changed to: E Major
+Practice changed to: Open D
+Practice [1/4]: Dm
+Auto-connecting to Aeroband...
+Starting BLE scan...
+Found 21 devices
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: None (56:45:0C:59:25:EC)
+  Device: AeroBand Midi 412b (DB:48:C3:06:41:2B)
+    -> Found Aeroband!
+Connecting to AeroBand Midi 412b at DB:48:C3:06:41:2B
+Successfully connected!
+Practice [2/4]: Dsus2
+Practice [3/4]: D
+Practice [4/4]: D5
