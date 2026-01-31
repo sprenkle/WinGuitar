@@ -6,7 +6,7 @@
   ["All Chords", ["A", "Am", "A7", "Ab", "B", "Bm", "B7", "C", "C7", "D", "Dm", "D7", "Db", "Dbsus4", "Db/F", "E", "Em", "E7", "Eb", "F", "Fm", "F7", "G", "Gm", "G7", "Gb", "D6/9", "G/B", "Am7", "D7/F#"]],
   ["Highway", ["Ab", "Db/F", "Db/F","Gb", "Db/F", "Gb", "Db/F", "", "Db/F", "Gb", "Db/F", "Gb", "Db/F", "Ab"]],
   ["Blue 7", ["A7", "B7", "C7", "D7", "E7", "F7", "G7"]],
-  ["A Major & 7", ["A", "A7", "Am"]],
+  ["Blue", ["E7", "A7", "E7" , "B7", "A7", "E7", "B7"]],
   ["B Major & 7", ["B", "B7", "Bm"]],
   ["C Major & 7", ["C", "C7"]],
   ["D Major & 7", ["D", "D7", "Dm"]],

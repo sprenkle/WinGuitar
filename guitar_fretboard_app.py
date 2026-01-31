@@ -19,6 +19,7 @@ from midi_handler import MIDIHandler
 from guitar import GuitarState
 from ChordVerifier import ChordVerifier
 from practice_library import PracticeLibrary
+from chord_list_widget import ChordListWidget
 
 try:
     from bleak import BleakScanner
@@ -130,6 +131,10 @@ class GuitarFretboardApp(QMainWindow):
         control_layout.addWidget(self.status_label)
         
         layout.addLayout(control_layout)
+        
+        # Add chord list widget (shows small diagrams of all practice chords)
+        self.chord_list_widget = ChordListWidget()
+        layout.addWidget(self.chord_list_widget)
         
         # Add fretboard widget to layout
         layout.addWidget(self.fretboard)
@@ -298,6 +303,9 @@ class GuitarFretboardApp(QMainWindow):
         self.practice_chords = collection or []
         print(f"[DEBUG] practice_chords populated with {len(self.practice_chords)} chords: {[c.name for c in self.practice_chords]}")
         self.current_practice_idx = 0
+        
+        # Update chord list widget
+        self.chord_list_widget.set_chords(self.practice_chords)
         self._load_next_practice_chord()
     
     def on_note_pressed(self, string, fret):
