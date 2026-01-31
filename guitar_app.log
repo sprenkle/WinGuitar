@@ -35075,3 +35075,32 @@ Found 26 devices
 No Aeroband found, will retry in 5 seconds
 Auto-connecting to Aeroband...
 Starting BLE scan...
+Found 25 devices
+  Device: S18 A812 LE (F3:33:6A:F6:23:9C)
+  Device: RevPLC (C1:8B:48:11:6F:FF)
+  Device: S&B VOLCANO H (CE:6D:47:B6:23:C2)
+  Device: Spark 2 BLE (D8:3B:DA:AB:23:B6)
+  Device: S18 A878 LE (F3:33:D0:F6:9B:26)
+  Device: None (A8:51:AB:9C:17:68)
+  Device: None (53:C6:58:B5:2B:50)
+  Device: None (73:06:B1:1D:29:5C)
+  Device: None (C4:F7:C1:24:00:EE)
+  Device: None (5F:BB:8F:DB:18:95)
+  Device: Govee_H6022_5570 (DB:B9:86:06:55:70)
+  Device: None (2B:BC:E1:B6:15:C9)
+  Device: Spark GO BLE (F7:EB:ED:10:9E:BD)
+  Device: TUYA_ (3C:0B:59:EE:8B:C9)
+  Device: None (55:82:2A:2E:F6:CE)
+  Device: None (48:B1:EB:0A:8B:07)
+  Device: None (52:39:05:7F:E1:B4)
+  Device: None (62:D5:83:41:E7:0A)
+  Device: None (59:E7:50:F3:B2:F1)
+  Device: TUYA_ (3C:0B:59:EE:7F:9B)
+  Device: None (C4:F7:C1:0D:FE:A7)
+  Device: None (49:04:7B:B3:0E:AC)
+  Device: None (6D:AF:1F:47:97:39)
+  Device: None (58:D3:49:F2:CE:B2)
+  Device: None (D2:E7:0A:39:3D:F9)
+No Aeroband found, will retry in 5 seconds
+Auto-connecting to Aeroband...
+Starting BLE scan...
